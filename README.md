@@ -1,6 +1,6 @@
 # api-pagination [![Build Status](https://travis-ci.org/davidcelis/api-pagination.png)](https://travis-ci.org/davidcelis/api-pagination)
 
-Put pagination info for your Rails API in your Link headers, not your response body.
+Put pagination info for your API in Link headers, not the response body.
 
 ## Installation
 
