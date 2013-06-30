@@ -1,6 +1,35 @@
 require 'spec_helper'
 
-describe NumbersController do
+Rails.application.routes.draw do
+  resources :numbers, only: [:index]
+end
+
+# quacks like Kaminari
+PaginatedSet = Struct.new(:current_page, :total_count) do
+  def limit_value() 25 end
+
+  def total_pages
+    total_count.zero? ? 1 : (total_count.to_f / limit_value).ceil
+  end
+
+  def first_page?() current_page == 1 end
+  def last_page?() current_page == total_pages end
+end
+
+class NumbersController < ActionController::Base
+  include Rails.application.routes.url_helpers
+
+  after_filter only: [:index] { paginate(:numbers) }
+
+  def index
+    page = params.fetch(:page, 1).to_i
+    total = params.fetch(:count).to_i
+    @numbers = PaginatedSet.new(page, total)
+    render json: @numbers
+  end
+end
+
+describe NumbersController, :type => :controller do
   describe 'GET #index' do
     context 'without enough items to give more than one page' do
       it 'should not paginate' do
