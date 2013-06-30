@@ -7,7 +7,6 @@ require "action_controller/railtie"
 # require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
-require 'kaminari'
 require 'api-pagination'
 
 module Dummy

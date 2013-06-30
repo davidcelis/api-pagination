@@ -1,5 +1,4 @@
 require 'api-pagination/version'
-require 'kaminari'
 
 module ApiPagination
   protected
@@ -29,3 +28,10 @@ end
 
 ActionController::Base.send(:include, ApiPagination) if defined?(ActionController::Base)
 ActionController::API.send(:include, ApiPagination)  if defined?(ActionController::API)
+
+if defined?(WillPaginate::CollectionMethods)
+  WillPaginate::CollectionMethods.module_eval do
+    def first_page?() !previous_page end
+    def last_page?() !next_page end
+  end
+end
