@@ -7,7 +7,15 @@ Put pagination info in a Link header, not the response body.
 In your `Gemfile`:
 
 ```ruby
-# Requires 'rails', '>= 3.0.0' and is compatible with 'rails-api'
+# Requires Rails and is compatible with Rails-API.
+gem 'rails', '>= 3.0.0'
+# gem 'rails-api'
+
+# Then choose your preferred paginator from the following:
+gem 'kaminari'
+gem 'will_paginate'
+
+# Finally...
 gem 'api-pagination'
 ```
 
@@ -50,7 +58,7 @@ Link: <http://localhost:3000/movies?page=1>; rel="first">,
 # ...
 ```
 
-api-pagination uses [Kaminari][kaminari] under the hood for paginating your ActiveRecord relations. See Kaminari's [documentation][kaminari-docs] for more information on its usage.
+While the above examples use [Kaminari][kaminari], api-pagination is also compatible with [will_paginate][will_paginate]. See either gem's README for more info on their respective usages.
 
 ## Contributing
 
@@ -61,4 +69,4 @@ api-pagination uses [Kaminari][kaminari] under the hood for paginating your Acti
 5. Create a new Pull Request
 
 [kaminari]: https://github.com/amatsuda/kaminari
-[kaminari-docs]: http://rubydoc.info/github/amatsuda/kaminari/frames
+[will_paginate]: https://github.com/mislav/will_paginate
