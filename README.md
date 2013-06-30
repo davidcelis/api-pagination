@@ -1,6 +1,6 @@
 # api-pagination [![Build Status](https://travis-ci.org/davidcelis/api-pagination.png)](https://travis-ci.org/davidcelis/api-pagination)
 
-Put pagination info for your API in Link headers, not the response body.
+Put pagination info in a Link header, not the response body.
 
 ## Installation
 
@@ -17,6 +17,7 @@ In your controllers:
 
 ```ruby
 class MoviesController < ApplicationController
+  # Uses the @movies and @actors variables set below
   after_filter only: [:index] { paginate(:movies) }
   after_filter only: [:cast]  { paginate(:actors) }
 
