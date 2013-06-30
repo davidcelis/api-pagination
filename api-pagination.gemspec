@@ -17,6 +17,5 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_development_dependency 'actionpack'
-  s.add_development_dependency 'activemodel'
-  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'rspec'
 end
