@@ -1,9 +1,16 @@
-# Require this file using `require 'spec_helper'` to ensure that it is only
-# loaded once.
-#
-# See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require File.expand_path("../dummy/config/environment", __FILE__)
+require 'action_controller'
+require 'api-pagination'
 require 'rspec/rails'
+require 'ostruct'
+
+module Rails
+  def self.application
+    @application ||= begin
+      routes = ActionDispatch::Routing::RouteSet.new
+      OpenStruct.new(routes: routes, env_config: {})
+    end
+  end
+end
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
