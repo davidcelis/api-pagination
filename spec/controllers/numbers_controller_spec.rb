@@ -34,7 +34,7 @@ describe NumbersController, :type => :controller do
     context 'without enough items to give more than one page' do
       it 'should not paginate' do
         get :index, count: 20
-        response.headers['Link'].should be_blank
+        response.headers.keys.should_not include("Link")
       end
     end
 
