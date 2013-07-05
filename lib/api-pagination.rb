@@ -22,7 +22,7 @@ module ApiPagination
         %(<#{url}?#{new_params.to_param}>; rel="#{k}")
       end
 
-      headers['Link'] = links.join(', ')
+      headers['Link'] = links.join(', ') unless links.empty?
     end
 end
 
