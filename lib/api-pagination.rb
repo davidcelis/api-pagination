@@ -2,7 +2,8 @@ require 'api-pagination/version'
 
 module ApiPagination
   protected
-    def paginate(scope)
+    def paginate(scope=nil)
+      scope ||= self.class.to_s.sub("Controller", "").underscore.split('/').last.pluralize
       scope = instance_variable_get(:"@#{scope}")
       url   = request.original_url.sub(/\?.*$/, '')
       pages = {}
