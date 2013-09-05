@@ -24,6 +24,13 @@ class NumbersController < ActionController::Base
   def index
     page = params.fetch(:page, 1).to_i
     total = params.fetch(:count).to_i
+
+    if params[:with_headers]
+      query = request.query_parameters
+      query.delete(:with_headers)
+      headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without") if params[:with_headers]
+    end
+
     @numbers = PaginatedSet.new(page, total)
     render json: @numbers
   end
@@ -34,7 +41,23 @@ describe NumbersController, :type => :controller do
     context 'without enough items to give more than one page' do
       it 'should not paginate' do
         get :index, count: 20
-        response.headers.keys.should_not include("Link")
+        response.headers.keys.should_not include('Link')
+      end
+    end
+
+    context 'with existing Link headers' do
+      before(:each) do
+        get :index, count: 30, with_headers: true
+        @links = response.headers['Link'].split(', ')
+      end
+
+      it 'should keep existing Links' do
+        @links.should include('<http://test.host/numbers?count=30>; rel="without"')
+      end
+
+      it 'should contain pagination Links' do
+        @links.should include('<http://test.host/numbers?count=30&page=2>; rel="next"')
+        @links.should include('<http://test.host/numbers?count=30&page=2>; rel="last"')
       end
     end
 

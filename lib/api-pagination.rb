@@ -3,6 +3,8 @@ require 'api-pagination/version'
 module ApiPagination
   protected
     def paginate(scope)
+      links = (headers['Link'] || "").split(',').map(&:strip)
+
       scope = instance_variable_get(:"@#{scope}")
       url   = request.original_url.sub(/\?.*$/, '')
       pages = {}
@@ -17,9 +19,9 @@ module ApiPagination
         pages[:next] = scope.current_page + 1
       end
 
-      links = pages.map do |k, v|
+      pages.each do |k, v|
         new_params = request.query_parameters.merge({ :page => v })
-        %(<#{url}?#{new_params.to_param}>; rel="#{k}")
+        links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
       end
 
       headers['Link'] = links.join(', ') unless links.empty?
