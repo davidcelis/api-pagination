@@ -20,7 +20,7 @@ module ApiPagination
       end
 
       pages.each do |k, v|
-        new_params = request.query_parameters.merge({ :page => v })
+        new_params = request.query_parameters.merge(:page => v)
         links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
       end
 
