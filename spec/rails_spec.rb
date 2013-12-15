@@ -5,7 +5,7 @@ describe NumbersController, :type => :controller do
     context 'without enough items to give more than one page' do
       it 'should not paginate' do
         get :index, count: 20
-        response.headers.keys.should_not include('Link')
+        expect(response.headers.keys).not_to include('Link')
       end
     end
 
@@ -16,12 +16,12 @@ describe NumbersController, :type => :controller do
       end
 
       it 'should keep existing Links' do
-        @links.should include('<http://test.host/numbers?count=30>; rel="without"')
+        expect(@links).to include('<http://test.host/numbers?count=30>; rel="without"')
       end
 
       it 'should contain pagination Links' do
-        @links.should include('<http://test.host/numbers?count=30&page=2>; rel="next"')
-        @links.should include('<http://test.host/numbers?count=30&page=2>; rel="last"')
+        expect(@links).to include('<http://test.host/numbers?count=30&page=2>; rel="next"')
+        expect(@links).to include('<http://test.host/numbers?count=30&page=2>; rel="last"')
       end
     end
 
@@ -34,19 +34,19 @@ describe NumbersController, :type => :controller do
         end
 
         it 'should not give a link with rel "first"' do
-          @links.should_not include('rel="first"')
+          expect(@links).not_to include('rel="first"')
         end
 
         it 'should not give a link with rel "prev"' do
-          @links.should_not include('rel="prev"')
+          expect(@links).not_to include('rel="prev"')
         end
 
         it 'should give a link with rel "last"' do
-          @links.should include('<http://test.host/numbers?count=100&page=4>; rel="last"')
+          expect(@links).to include('<http://test.host/numbers?count=100&page=4>; rel="last"')
         end
 
         it 'should give a link with rel "next"' do
-          @links.should include('<http://test.host/numbers?count=100&page=2>; rel="next"')
+          expect(@links).to include('<http://test.host/numbers?count=100&page=2>; rel="next"')
         end
       end
 
@@ -58,19 +58,19 @@ describe NumbersController, :type => :controller do
         end
 
         it 'should not give a link with rel "last"' do
-          @links.should_not include('rel="last"')
+          expect(@links).not_to include('rel="last"')
         end
 
         it 'should not give a link with rel "next"' do
-          @links.should_not include('rel="next"')
+          expect(@links).not_to include('rel="next"')
         end
 
         it 'should give a link with rel "first"' do
-          @links.should include('<http://test.host/numbers?count=100&page=1>; rel="first"')
+          expect(@links).to include('<http://test.host/numbers?count=100&page=1>; rel="first"')
         end
 
         it 'should give a link with rel "prev"' do
-          @links.should include('<http://test.host/numbers?count=100&page=3>; rel="prev"')
+          expect(@links).to include('<http://test.host/numbers?count=100&page=3>; rel="prev"')
         end
       end
 
@@ -80,10 +80,10 @@ describe NumbersController, :type => :controller do
 
           links = response.headers['Link'].split(', ')
 
-          links.should include('<http://test.host/numbers?count=100&page=1>; rel="first"')
-          links.should include('<http://test.host/numbers?count=100&page=4>; rel="last"')
-          links.should include('<http://test.host/numbers?count=100&page=3>; rel="next"')
-          links.should include('<http://test.host/numbers?count=100&page=1>; rel="prev"')
+          expect(links).to include('<http://test.host/numbers?count=100&page=1>; rel="first"')
+          expect(links).to include('<http://test.host/numbers?count=100&page=4>; rel="last"')
+          expect(links).to include('<http://test.host/numbers?count=100&page=3>; rel="next"')
+          expect(links).to include('<http://test.host/numbers?count=100&page=1>; rel="prev"')
         end
       end
     end
