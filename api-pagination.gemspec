@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.test_files    = Dir['spec/**/*']
   s.require_paths = ['lib']
 
-  s.add_development_dependency 'actionpack'
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'grape'
+  s.add_development_dependency 'actionpack'
 end

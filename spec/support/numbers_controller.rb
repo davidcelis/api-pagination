@@ -1,5 +1,5 @@
 require 'action_controller'
-require 'spec_helper'
+require 'ostruct'
 
 module Rails
   def self.application
@@ -57,11 +57,7 @@ class NumbersController < ActionController::Base
       headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without") if params[:with_headers]
     end
 
-    @numbers = PaginatedSet.new(page, total)
+    @numbers = PaginatedSet.new(page, 25, total)
     render json: @numbers
   end
-end
-
-RSpec.configure do |config|
-  config.include ControllerExampleGroup, :type => :controller
 end

@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require 'spec_helper'
 
 describe NumbersController, :type => :controller do
   describe 'GET #index' do
@@ -10,8 +10,9 @@ describe NumbersController, :type => :controller do
     end
 
     context 'with existing Link headers' do
-      before(:each) do
+      before do
         get :index, count: 30, with_headers: true
+
         @links = response.headers['Link'].split(', ')
       end
 
@@ -27,7 +28,7 @@ describe NumbersController, :type => :controller do
 
     context 'with enough items to paginate' do
       context 'when on the first page' do
-        before(:each) do
+        before do
           get :index, count: 100
 
           @links = response.headers['Link'].split(', ')
@@ -51,7 +52,7 @@ describe NumbersController, :type => :controller do
       end
 
       context 'when on the last page' do
-        before(:each) do
+        before do
           get :index, count: 100, page: 4
 
           @links = response.headers['Link'].split(', ')

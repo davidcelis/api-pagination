@@ -13,6 +13,12 @@ module ApiPagination
         ActionController::API.send(:include, Rails::Pagination)
       end
 
+      begin; require 'grape'; rescue LoadError; end
+      if defined?(Grape::API)
+        require 'grape/pagination'
+        Grape::API.send(:include, Grape::Pagination)
+      end
+
       begin; require 'will_paginate'; rescue LoadError; end
       if defined?(WillPaginate::CollectionMethod)
         WillPaginate::CollectionMethods.module_eval do
