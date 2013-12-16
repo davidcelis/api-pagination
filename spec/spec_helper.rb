@@ -1,9 +1,6 @@
-require 'rspec/autorun'
 require 'support/numbers_controller'
-require 'api-pagination'
 require 'support/numbers_api'
-
-ApiPagination.kaminari = true
+require 'api-pagination'
 
 # Quacks like Kaminari and will_paginate
 PaginatedSet = Struct.new(:current_page, :per_page, :total_count) do
@@ -28,6 +25,9 @@ PaginatedSet = Struct.new(:current_page, :per_page, :total_count) do
     page(options[:page]).per(options[:per_page])
   end
 end
+
+ApiPagination.kaminari      = ENV['PAGINATOR'] == 'kaminari'
+ApiPagination.will_paginate = ENV['PAGINATOR'] == 'will_paginate'
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods

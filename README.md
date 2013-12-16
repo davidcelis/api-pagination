@@ -83,15 +83,14 @@ Link: <http://localhost:3000/movies?page=1>; rel="first">,
 # ...
 ```
 
-While the above examples use [Kaminari][kaminari], api-pagination is also compatible with [will_paginate][will_paginate]. See either gem's README for more info on their respective usages.
-
 ## Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+3. Commit your changes and tests (`git commit -am 'Add some feature'`)
+4. Run the tests (`KAMINARI=true bundle exec rspec; WILL_PAGINATE=true bundle exec rspec`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
 
 [kaminari]: https://github.com/amatsuda/kaminari
 [will_paginate]: https://github.com/mislav/will_paginate

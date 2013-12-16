@@ -1,3 +1,6 @@
+require 'grape'
+require 'api-pagination'
+
 class NumbersAPI < Grape::API
   format :json
 
