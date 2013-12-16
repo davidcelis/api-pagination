@@ -1,3 +1,4 @@
+require 'pry'
 module Rails
   module Pagination
     protected

@@ -52,9 +52,9 @@ class NumbersController < ActionController::Base
     total = params.fetch(:count).to_i
 
     if params[:with_headers]
-      query = request.query_parameters
+      query = request.query_parameters.dup
       query.delete(:with_headers)
-      headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without") if params[:with_headers]
+      headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without")
     end
 
     @numbers = PaginatedSet.new(page, 25, total)
