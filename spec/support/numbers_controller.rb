@@ -5,7 +5,7 @@ module Rails
   def self.application
     @application ||= begin
       routes = ActionDispatch::Routing::RouteSet.new
-      OpenStruct.new(routes: routes, env_config: {})
+      OpenStruct.new(:routes => routes, :env_config => {})
     end
   end
 end
@@ -39,13 +39,13 @@ module ControllerExampleGroup
 end
 
 Rails.application.routes.draw do
-  resources :numbers, only: [:index]
+  resources :numbers, :only => [:index]
 end
 
 class NumbersController < ActionController::Base
   include Rails.application.routes.url_helpers
 
-  after_filter only: [:index] { paginate(:numbers) }
+  after_filter :only => [:index] { paginate(:numbers) }
 
   def index
     page = params.fetch(:page, 1).to_i
@@ -58,6 +58,6 @@ class NumbersController < ActionController::Base
     end
 
     @numbers = PaginatedSet.new(page, 25, total)
-    render json: @numbers
+    render :json => @numbers
   end
 end
