@@ -34,7 +34,7 @@ class MoviesController < ApplicationController
 
   # GET /movies
   def index
-    @movies = Movie.scoped
+    @movies = Movie.all # Movie.scoped if not on Rails 4.x
 
     render json: @movies
   end
@@ -63,7 +63,7 @@ class MoviesAPI < Grape::API
   desc 'Return a paginated set of movies'
   paginate per_page: 25
   get :numbers do
-    movies = Movie.scoped
+    movies = Movie.all # Movie.scoped if not on Rails 4.x
 
     # This method must take an ActiveRecord::Relation
     # or some equivalent pageable set.
