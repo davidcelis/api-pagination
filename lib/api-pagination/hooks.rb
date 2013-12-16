@@ -25,9 +25,14 @@ module ApiPagination
           def first_page?() !previous_page end
           def last_page?() !next_page end
         end
+
+        ApiPagination.will_paginate = true
       end
 
       begin; require 'kaminari'; rescue LoadError; end
+      if defined?(Kaminari)
+        ApiPagination.kaminari = true
+      end
 
       STDERR.puts <<-EOC unless defined?(Kaminari) || defined?(WillPaginate)
 Warning: api-pagination relies on either Kaminari or WillPaginate. Please

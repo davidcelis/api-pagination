@@ -3,7 +3,9 @@ require 'support/numbers_controller'
 require 'api-pagination'
 require 'support/numbers_api'
 
-# Quacks like Kaminari
+ApiPagination.kaminari = true
+
+# Quacks like Kaminari and will_paginate
 PaginatedSet = Struct.new(:current_page, :per_page, :total_count) do
   def total_pages
     total_count.zero? ? 1 : (total_count.to_f / per_page).ceil
@@ -20,6 +22,10 @@ PaginatedSet = Struct.new(:current_page, :per_page, :total_count) do
   def per(per)
     per_page = per
     self
+  end
+
+  def paginate(options = {})
+    page(options[:page]).per(options[:per_page])
   end
 end
 
