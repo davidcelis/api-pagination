@@ -70,6 +70,7 @@ class MoviesAPI < Grape::API
     paginate movies
   end
 end
+```
 
 Then `curl --include` to see your Link header pagination in action:
 
