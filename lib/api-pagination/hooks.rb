@@ -20,7 +20,7 @@ module ApiPagination
       end
 
       begin; require 'will_paginate'; rescue LoadError; end
-      if defined?(WillPaginate::CollectionMethod)
+      if defined?(WillPaginate::CollectionMethods)
         WillPaginate::CollectionMethods.module_eval do
           def first_page?() !previous_page end
           def last_page?() !next_page end
