@@ -26,8 +26,12 @@ PaginatedSet = Struct.new(:current_page, :per_page, :total_count) do
   end
 end
 
-ApiPagination.kaminari      = ENV['PAGINATOR'] == 'kaminari'
-ApiPagination.will_paginate = ENV['PAGINATOR'] == 'will_paginate'
+if ENV['PAGINATOR']
+  ApiPagination.instance_variable_set(:@paginator, ENV['PAGINATOR'].to_sym)
+else
+  warn 'No PAGINATOR set. Defaulting to kaminari. To test against will_paginate, run `PAGINATOR=will_paginate bundle exec rspec`'
+  ApiPagination.instance_variable_set(:@paginator, :kaminari)
+end
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods

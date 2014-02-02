@@ -84,6 +84,13 @@ Link: <http://localhost:3000/movies?page=1>; rel="first">,
 # ...
 ```
 
+## Testing
+
+```bash
+PAGINATOR=kaminari bundle exec rspec
+PAGINATOR=will_paginate bundle exec rspec
+```
+
 ## Contributing
 
 1. Fork it

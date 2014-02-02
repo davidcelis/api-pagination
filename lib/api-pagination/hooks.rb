@@ -26,12 +26,12 @@ module ApiPagination
           def last_page?() !next_page end
         end
 
-        ApiPagination.will_paginate = true
+        ApiPagination.instance_variable_set(:@paginator, :will_paginate)
       end
 
       begin; require 'kaminari'; rescue LoadError; end
       if defined?(Kaminari)
-        ApiPagination.kaminari = true
+        ApiPagination.instance_variable_set(:@paginator, :kaminari)
       end
 
       STDERR.puts <<-EOC unless defined?(Kaminari) || defined?(WillPaginate)

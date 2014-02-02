@@ -3,19 +3,16 @@ require 'api-pagination/version'
 
 module ApiPagination
   class << self
-    attr_writer :kaminari
-    attr_writer :will_paginate
-
-    def kaminari?() !!@kaminari end
-    def will_paginate?() !!@will_paginate end
+    attr_reader :paginator
 
     def paginate(collection, options = {}, &block)
       options[:page]     ||= 1
       options[:per_page] ||= 10
 
-      if ApiPagination.kaminari?
+      case ApiPagination.paginator
+      when :kaminari
         collection.page(options[:page]).per(options[:per_page]).tap(&block)
-      elsif ApiPagination.will_paginate?
+      when :will_paginate
         collection.paginate(:page => options[:page], :per_page => options[:per_page]).tap(&block)
       end
     end
