@@ -15,7 +15,8 @@ module Rails
             links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
           end
 
-          headers['Link'] = links.join(', ') unless links.empty?
+          headers['Link']  = links.join(', ') unless links.empty?
+          headers['Total'] = ApiPagination.total_from(collection)
         end
 
         ApiPagination.paginate(collection, params, &block)

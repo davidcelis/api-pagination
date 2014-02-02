@@ -14,4 +14,8 @@ shared_examples 'an endpoint with a first page' do
   it 'should give a link with rel "next"' do
     expect(links).to include('<http://example.org/numbers?count=100&page=2>; rel="next"')
   end
+
+  it 'should give a Total header' do
+    expect(total).to eq(100)
+  end
 end

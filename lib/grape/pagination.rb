@@ -15,6 +15,7 @@ module Grape
             end
 
             header 'Link', links.join(', ') unless links.empty?
+            header 'Total', ApiPagination.total_from(collection)
           end
 
           ApiPagination.paginate(collection, params, &block)

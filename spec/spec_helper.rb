@@ -24,6 +24,8 @@ PaginatedSet = Struct.new(:current_page, :per_page, :total_count) do
   def paginate(options = {})
     page(options[:page]).per(options[:per_page])
   end
+
+  alias :total_entries :total_count
 end
 
 if ENV['PAGINATOR']

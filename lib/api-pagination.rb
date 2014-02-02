@@ -30,6 +30,13 @@ module ApiPagination
         end
       end
     end
+
+    def total_from(collection)
+      case ApiPagination.paginator
+        when :kaminari      then collection.total_count
+        when :will_paginate then collection.total_entries
+      end
+    end
   end
 end
 

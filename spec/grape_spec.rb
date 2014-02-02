@@ -7,11 +7,17 @@ require 'support/shared_examples/last_page'
 describe NumbersAPI do
   describe 'GET #index' do
     let(:links) { last_response.headers['Link'].split(', ') }
+    let(:total) { last_response.headers['Total'].to_i }
 
     context 'without enough items to give more than one page' do
+      before { get :numbers, :count => 20 }
+
       it 'should not paginate' do
-        get :numbers, :count => 20
         expect(last_response.headers.keys).not_to include('Link')
+      end
+
+      it 'should give a Total header' do
+        expect(total).to eq(20)
       end
     end
 

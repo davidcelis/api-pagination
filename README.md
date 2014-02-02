@@ -1,6 +1,6 @@
 # api-pagination [![Build Status](https://travis-ci.org/davidcelis/api-pagination.png)](https://travis-ci.org/davidcelis/api-pagination)
 
-Put pagination info in a Link header, not the response body.
+Paginate in your headers, not in your response body.
 
 ## Installation
 
@@ -72,7 +72,7 @@ class MoviesAPI < Grape::API
 end
 ```
 
-Then `curl --include` to see your Link header pagination in action:
+Then `curl --include` to see your header-based pagination in action:
 
 ```bash
 $ curl --include 'https://localhost:3000/movies?page=5'
@@ -81,6 +81,7 @@ Link: <http://localhost:3000/movies?page=1>; rel="first">,
   <http://localhost:3000/movies?page=173>; rel="last">,
   <http://localhost:3000/movies?page=6>; rel="next">,
   <http://localhost:3000/movies?page=4>; rel="prev">
+Total: 4321
 # ...
 ```
 
