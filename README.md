@@ -1,8 +1,8 @@
 # api-pagination
 
-Paginate in your headers, not in your response body.
-
 [![Build Status][travis-badge]][travis] [![Coverage][coveralls-badge]][coveralls] [![Climate][code-climate-badge]][code-climate] [![Dependencies][gemnasium-badge]][gemnasium] [![gittip][gittip-badge]][gittip]
+
+Paginate in your headers, not in your response body.
 
 ## Installation
 
