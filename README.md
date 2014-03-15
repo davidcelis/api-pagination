@@ -1,6 +1,8 @@
-# api-pagination [![Build Status](https://travis-ci.org/davidcelis/api-pagination.png)](https://travis-ci.org/davidcelis/api-pagination)
+# api-pagination
 
 Paginate in your headers, not in your response body.
+
+[![Build Status][travis-badge]][travis] [![Coverage][coveralls-badge]][coveralls] [![Climate][code-climate-badge]][code-climate] [![Dependencies][gemnasium-badge]][gemnasium] [![gittip][gittip-badge]][gittip]
 
 ## Installation
 
@@ -85,21 +87,16 @@ Total: 4321
 # ...
 ```
 
-## Testing
-
-```bash
-PAGINATOR=kaminari bundle exec rspec
-PAGINATOR=will_paginate bundle exec rspec
-```
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes and tests (`git commit -am 'Add some feature'`)
-4. Run the tests (`KAMINARI=true bundle exec rspec; WILL_PAGINATE=true bundle exec rspec`)
-5. Push to the branch (`git push origin my-new-feature`)
-6. Create a new Pull Request
-
 [kaminari]: https://github.com/amatsuda/kaminari
 [will_paginate]: https://github.com/mislav/will_paginate
+
+[travis]: https://travis-ci.org/davidcelis/api-pagination
+[travis-badge]: http://img.shields.io/travis/davidcelis/api-pagination/master.svg
+[coveralls]: https://coveralls.io/r/davidcelis/api-pagination
+[coveralls-badge]: http://img.shields.io/coveralls/davidcelis/api-pagination/master.svg
+[code-climate]: https://codeclimate.com/github/davidcelis/api-pagination
+[code-climate-badge]: http://img.shields.io/codeclimate/github/davidcelis/api-pagination.svg
+[gemnasium]: http://gemnasium.com/davidcelis/api-pagination
+[gemnasium-badge]: http://img.shields.io/gemnasium/davidcelis/api-pagination.svg
+[gittip]: https://gittip.com/davidcelis
+[gittip-badge]: http://img.shields.io/gittip/davidcelis.svg
