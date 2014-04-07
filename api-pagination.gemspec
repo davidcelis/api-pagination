@@ -7,8 +7,8 @@ Gem::Specification.new do |s|
   s.version       = ApiPagination::VERSION
   s.authors       = ['David Celis']
   s.email         = ['me@davidcel.is']
-  s.description   = 'Link header pagination for Rails APIs'
-  s.summary       = "Link header pagination for Rails APIs. Don't use the request body."
+  s.description   = 'Link header pagination for Rails and Grape APIs'
+  s.summary       = "Link header pagination for Rails and Grape APIs. Don't use the request body."
   s.homepage      = 'https://github.com/davidcelis/api-pagination'
   s.license       = 'MIT'
 
