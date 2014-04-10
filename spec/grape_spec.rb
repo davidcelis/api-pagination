@@ -19,6 +19,11 @@ describe NumbersAPI do
       it 'should give a Total header' do
         expect(total).to eq(10)
       end
+
+      it 'should list all numbers in the response body' do
+        body = '[1,2,3,4,5,6,7,8,9,10]'
+        expect(last_response.body).to eq(body)
+      end
     end
 
     context 'with existing Link headers' do
