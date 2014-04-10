@@ -11,6 +11,7 @@ module ApiPagination
 
       case ApiPagination.paginator
       when :kaminari
+        collection = Kaminari.paginate_array(collection) if collection.is_a?(Array)
         collection.page(options[:page]).per(options[:per_page]).tap(&block)
       when :will_paginate
         collection.paginate(:page => options[:page], :per_page => options[:per_page]).tap(&block)
