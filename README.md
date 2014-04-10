@@ -24,39 +24,41 @@ gem 'api-pagination'
 
 ## Rails
 
-In your controller:
+In your controller, provide a pageable collection to the `paginate` method:
 
 ```ruby
 class MoviesController < ApplicationController
-  # Uses the @movies and @actors variables set below.
-  # This method must take an ActiveRecord::Relation
-  # or some equivalent pageable set.
-  after_filter only: [:index] { paginate(:movies) }
-  after_filter only: [:cast]  { paginate(:actors) }
-
   # GET /movies
   def index
-    @movies = Movie.all # Movie.scoped if using ActiveRecord 3.x
+    movies = Movie.all # Movie.scoped if using ActiveRecord 3.x
 
-    render json: @movies
+    paginate json: movies
   end
 
   # GET /movies/:id/cast
   def cast
-    @movie  = Movie.find(params[:id])
-    @actors = @movie.actors
+    actors = Movie.find(params[:id]).actors
 
-    # Override how many Actors get returned.
-    params[:per_page] = 10
+    # Override how many Actors get returned. The default is 10.
+    params[:per_page] = 25
 
-    render json: @actors
+    paginate json: actors
   end
 end
 ```
 
+`paginate` will:
+
+* Pull your collection from `json:` or `xml:`
+* Use `params[:page]` and `params[:per_page]` to paginate your collection for you
+* Use the paginated collection to render `Link` headers
+* Call `ActionController::Base#render` with whatever you passed to `paginate`.
+
+The collection sent to `paginate` _must_ respond to your paginator's methods. For Kaminari, `Kaminari.paginate_array` will be called for you behind-the-scenes. For WillPaginate, you're out of luck unless you somewhere `require 'will_paginate/array'`. Because this pollutes `Array`, it won't be done for you automatically.
+
 ## Grape
 
-In your API endpoint:
+Grape is similar, though `paginate` won't take options. Only your collection. In your API endpoint:
 
 ```ruby
 class MoviesAPI < Grape::API

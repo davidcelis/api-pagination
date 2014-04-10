@@ -2,8 +2,8 @@ module Rails
   module Pagination
     protected
 
-      def paginate(collection)
-        collection = instance_variable_get(:"@#{collection}")
+      def paginate(options)
+        collection = options[:json] || options[:xml]
 
         block = Proc.new do |collection|
           links = (headers['Link'] || "").split(',').map(&:strip)
@@ -19,7 +19,13 @@ module Rails
           headers['Total'] = ApiPagination.total_from(collection)
         end
 
-        ApiPagination.paginate(collection, params, &block)
+        collection = ApiPagination.paginate(collection, params, &block)
+
+        options[:json] = collection if options[:json]
+        options[:xml]  = collection if options[:xml]
+
+        render options
       end
   end
 end
+
