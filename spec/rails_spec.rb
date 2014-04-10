@@ -12,13 +12,14 @@ describe NumbersController, :type => :controller do
     let(:total) { response.headers['Total'].to_i }
 
     context 'without enough items to give more than one page' do
-      before { get :index, :count => 20 }
+      before { get :index, :count => 10 }
+
       it 'should not paginate' do
         expect(response.headers.keys).not_to include('Link')
       end
 
       it 'should give a Total header' do
-        expect(total).to eq(20)
+        expect(total).to eq(10)
       end
     end
 
@@ -36,7 +37,7 @@ describe NumbersController, :type => :controller do
       end
 
       context 'when on the last page' do
-        before { get :index, :count => 100, :page => 4 }
+        before { get :index, :count => 100, :page => 10 }
 
         it_behaves_like 'an endpoint with a last page'
       end

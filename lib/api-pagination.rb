@@ -40,5 +40,3 @@ module ApiPagination
     end
   end
 end
-
-ApiPagination::Hooks.init

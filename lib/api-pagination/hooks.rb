@@ -45,3 +45,5 @@ EOC
     end
   end
 end
+
+ApiPagination::Hooks.init

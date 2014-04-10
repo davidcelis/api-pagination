@@ -8,7 +8,7 @@ shared_examples 'an endpoint with a first page' do
   end
 
   it 'should give a link with rel "last"' do
-    expect(links).to include('<http://example.org/numbers?count=100&page=4>; rel="last"')
+    expect(links).to include('<http://example.org/numbers?count=100&page=10>; rel="last"')
   end
 
   it 'should give a link with rel "next"' do

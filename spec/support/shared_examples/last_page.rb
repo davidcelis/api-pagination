@@ -12,7 +12,7 @@ shared_examples 'an endpoint with a last page' do
   end
 
   it 'should give a link with rel "prev"' do
-    expect(links).to include('<http://example.org/numbers?count=100&page=3>; rel="prev"')
+    expect(links).to include('<http://example.org/numbers?count=100&page=9>; rel="prev"')
   end
 
   it 'should give a Total header' do

@@ -5,7 +5,7 @@ class NumbersAPI < Grape::API
   format :json
 
   desc 'Return some paginated set of numbers'
-  paginate :per_page => 25
+  paginate :per_page => 10
   params do
     requires :count, :type => Integer
     optional :with_headers, :default => false, :type => Boolean
@@ -18,6 +18,6 @@ class NumbersAPI < Grape::API
       header 'Link', %(<#{url}?#{query.to_query}>; rel="without")
     end
 
-    paginate PaginatedSet.new(params[:page], params[:per_page], params[:count])
+    paginate (1..params[:count]).to_a
   end
 end

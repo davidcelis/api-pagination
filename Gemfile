@@ -3,5 +3,8 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in api_pagination.gemspec
 gemspec
 
+gem 'kaminari', require: false
+gem 'will_paginate', require: false
+
 gem 'rake', require: false
 gem 'coveralls', require: false

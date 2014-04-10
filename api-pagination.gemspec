@@ -18,5 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'grape'
+  s.add_development_dependency 'railties', '>= 3.0.0'
   s.add_development_dependency 'actionpack', '>= 3.0.0'
 end

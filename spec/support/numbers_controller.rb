@@ -57,7 +57,7 @@ class NumbersController < ActionController::Base
       headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without")
     end
 
-    @numbers = PaginatedSet.new(page, 25, total)
+    @numbers = (1..total).to_a
     render :json => @numbers
   end
 end

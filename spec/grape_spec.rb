@@ -10,14 +10,14 @@ describe NumbersAPI do
     let(:total) { last_response.headers['Total'].to_i }
 
     context 'without enough items to give more than one page' do
-      before { get :numbers, :count => 20 }
+      before { get :numbers, :count => 10 }
 
       it 'should not paginate' do
         expect(last_response.headers.keys).not_to include('Link')
       end
 
       it 'should give a Total header' do
-        expect(total).to eq(20)
+        expect(total).to eq(10)
       end
     end
 
@@ -35,7 +35,7 @@ describe NumbersAPI do
       end
 
       context 'when on the last page' do
-        before { get :numbers, :count => 100, :page => 4 }
+        before { get :numbers, :count => 100, :page => 10 }
 
         it_behaves_like 'an endpoint with a last page'
       end
