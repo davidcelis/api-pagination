@@ -45,8 +45,6 @@ end
 class NumbersController < ActionController::Base
   include Rails.application.routes.url_helpers
 
-  # after_filter :only => [:index] { paginate(:numbers) }
-
   def index
     page = params.fetch(:page, 1).to_i
     total = params.fetch(:count).to_i
@@ -57,8 +55,6 @@ class NumbersController < ActionController::Base
       headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without")
     end
 
-    numbers = (1..total).to_a
-
-    paginate :json => numbers
+    paginate :json => (1..total).to_a
   end
 end
