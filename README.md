@@ -40,19 +40,17 @@ class MoviesController < ApplicationController
     actors = Movie.find(params[:id]).actors
 
     # Override how many Actors get returned. The default is 10.
-    params[:per_page] = 25
-
-    paginate json: actors
+    paginate json: actors, per_page: 25
   end
 end
 ```
 
 `paginate` will:
 
-* Pull your collection from `json:` or `xml:`
-* Use `params[:page]` and `params[:per_page]` to paginate your collection for you
-* Use the paginated collection to render `Link` headers
-* Call `ActionController::Base#render` with whatever you passed to `paginate`.
+1. Pull your collection from `json:` or `xml:`
+2. Use `params[:page]` and `params[:per_page]` to paginate your collection for you
+3. Use the paginated collection to render `Link` headers
+4. Call `ActionController::Base#render` with whatever you passed to `paginate`.
 
 The collection sent to `paginate` _must_ respond to your paginator's methods. For Kaminari, `Kaminari.paginate_array` will be called for you behind-the-scenes. For WillPaginate, you're out of luck unless you somewhere `require 'will_paginate/array'`. Because this pollutes `Array`, it won't be done for you automatically.
 

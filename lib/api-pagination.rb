@@ -5,16 +5,16 @@ module ApiPagination
   class << self
     attr_reader :paginator
 
-    def paginate(collection, options = {}, &block)
+    def paginate(collection, options = {})
       options[:page]     ||= 1
       options[:per_page] ||= 10
 
       case ApiPagination.paginator
       when :kaminari
         collection = Kaminari.paginate_array(collection) if collection.is_a?(Array)
-        collection.page(options[:page]).per(options[:per_page]).tap(&block)
+        collection.page(options[:page]).per(options[:per_page])
       when :will_paginate
-        collection.paginate(:page => options[:page], :per_page => options[:per_page]).tap(&block)
+        collection.paginate(:page => options[:page], :per_page => options[:per_page])
       end
     end
 

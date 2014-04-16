@@ -3,22 +3,22 @@ module Grape
     def self.included(base)
       Grape::Endpoint.class_eval do
         def paginate(collection)
-          block = Proc.new do |collection|
-            links = (header['Link'] || "").split(',').map(&:strip)
-            url   = request.url.sub(/\?.*$/, '')
-            pages = ApiPagination.pages_from(collection)
+          collection = ApiPagination.paginate(collection, params)
 
-            pages.each do |k, v|
-              old_params = Rack::Utils.parse_query(request.query_string)
-              new_params = old_params.merge('page' => v)
-              links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
-            end
+          links = (header['Link'] || "").split(',').map(&:strip)
+          url   = request.url.sub(/\?.*$/, '')
+          pages = ApiPagination.pages_from(collection)
 
-            header 'Link', links.join(', ') unless links.empty?
-            header 'Total', ApiPagination.total_from(collection)
+          pages.each do |k, v|
+            old_params = Rack::Utils.parse_query(request.query_string)
+            new_params = old_params.merge('page' => v)
+            links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
           end
 
-          ApiPagination.paginate(collection, params, &block)
+          header 'Link', links.join(', ') unless links.empty?
+          header 'Total', ApiPagination.total_from(collection)
+
+          return collection
         end
       end
 
