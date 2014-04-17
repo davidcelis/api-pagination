@@ -19,8 +19,11 @@ module Rails
     private
 
     def _paginate_collection(collection, options)
-      params[:per_page] = options.delete(:per_page) if options[:per_page]
-      collection = ApiPagination.paginate(collection, params)
+      options = {
+        :page     => params[:page],
+        :per_page => (options.delete(:per_page) || params[:per_page])
+      }
+      collection = ApiPagination.paginate(collection, options)
 
       links = (headers['Link'] || "").split(',').map(&:strip)
       url   = request.original_url.sub(/\?.*$/, '')

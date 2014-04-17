@@ -3,7 +3,11 @@ module Grape
     def self.included(base)
       Grape::Endpoint.class_eval do
         def paginate(collection)
-          collection = ApiPagination.paginate(collection, params)
+          options = {
+            :page     => params[:page],
+            :per_page => (settings[:per_page] || params[:per_page])
+          }
+          collection = ApiPagination.paginate(collection, options)
 
           links = (header['Link'] || "").split(',').map(&:strip)
           url   = request.url.sub(/\?.*$/, '')
@@ -24,11 +28,11 @@ module Grape
 
       base.class_eval do
         def self.paginate(options = {})
-          options.reverse_merge!(:per_page => 10)
+          set :per_page, options[:per_page]
           params do
             optional :page,     :type => Integer, :default => 1,
                                 :desc => 'Page of results to fetch.'
-            optional :per_page, :type => Integer, :default => options[:per_page],
+            optional :per_page, :type => Integer,
                                 :desc => 'Number of results to return per page.'
           end
         end

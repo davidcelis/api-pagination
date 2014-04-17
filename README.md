@@ -39,8 +39,9 @@ class MoviesController < ApplicationController
   def cast
     actors = Movie.find(params[:id]).actors
 
-    # Override how many Actors get returned. The default is 10.
-    paginate json: actors, per_page: 25
+    # Override how many Actors get returned. If unspecified,
+    # params[:per_page] (which defaults to 25) will be used.
+    paginate json: actors, per_page: 10
   end
 end
 ```
@@ -63,13 +64,21 @@ class MoviesAPI < Grape::API
   format :json
 
   desc 'Return a paginated set of movies'
-  paginate per_page: 25
-  get :numbers do
-    movies = Movie.all # Movie.scoped if using ActiveRecord 3.x
-
+  paginate
+  get do
     # This method must take an ActiveRecord::Relation
     # or some equivalent pageable set.
-    paginate movies
+    paginate Movie.all
+  end
+
+  route_param :id do
+    desc "Return one movie's cast, paginated"
+    # Override how many Actors get returned. If unspecified,
+    # params[:per_page] (which defaults to 25) will be used.
+    paginate per_page: 10
+    get :cast do
+      paginate Movie.find(params[:id]).actors
+    end
   end
 end
 ```

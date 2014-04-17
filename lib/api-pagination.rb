@@ -7,7 +7,7 @@ module ApiPagination
 
     def paginate(collection, options = {})
       options[:page]     ||= 1
-      options[:per_page] ||= 10
+      options[:per_page] ||= 25
 
       case ApiPagination.paginator
       when :kaminari

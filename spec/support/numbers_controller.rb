@@ -55,6 +55,6 @@ class NumbersController < ActionController::Base
       headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without")
     end
 
-    paginate :json => (1..total).to_a
+    paginate :json => (1..total).to_a, :per_page => 10
   end
 end
