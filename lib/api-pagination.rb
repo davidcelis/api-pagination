@@ -14,7 +14,11 @@ module ApiPagination
         collection = Kaminari.paginate_array(collection) if collection.is_a?(Array)
         collection.page(options[:page]).per(options[:per_page])
       when :will_paginate
-        collection.paginate(:page => options[:page], :per_page => options[:per_page])
+        if defined?(Sequel::Dataset) && collection.kind_of?(Sequel::Dataset)
+          collection.paginate(options[:page], options[:per_page])
+        else
+          collection.paginate(:page => options[:page], :per_page => options[:per_page])
+        end
       end
     end
 

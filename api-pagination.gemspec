@@ -20,4 +20,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'grape'
   s.add_development_dependency 'railties', '>= 3.0.0'
   s.add_development_dependency 'actionpack', '>= 3.0.0'
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'sequel', '>= 4.9.0'
 end
