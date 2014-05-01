@@ -28,7 +28,7 @@ module Grape
 
       base.class_eval do
         def self.paginate(options = {})
-          set :per_page, options[:per_page]
+          set :per_page, (options[:per_page] || 25)
           params do
             optional :page,     :type => Integer, :default => 1,
                                 :desc => 'Page of results to fetch.'
