@@ -18,7 +18,7 @@ module Rails
 
     private
 
-    def _paginate_collection(collection, options)
+    def _paginate_collection(collection, options={})
       options = {
         :page     => params[:page],
         :per_page => (options.delete(:per_page) || params[:per_page])
