@@ -5,7 +5,7 @@ module Grape
         def paginate(collection)
           options = {
             :page     => params[:page],
-            :per_page => (settings[:per_page] || params[:per_page])
+            :per_page => (params[:per_page] || settings[:per_page])
           }
           collection = ApiPagination.paginate(collection, options)
 
