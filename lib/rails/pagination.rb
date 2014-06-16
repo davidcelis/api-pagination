@@ -12,8 +12,8 @@ module Rails
       render options
     end
 
-    def paginate_with(collection)
-      respond_with _paginate_collection(collection)
+    def paginate_with(collection, options={})
+      respond_with _paginate_collection(collection, options)
     end
 
     private
