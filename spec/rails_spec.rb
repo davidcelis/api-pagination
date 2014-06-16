@@ -117,6 +117,39 @@ describe NumbersResponderController, :type => :controller do
         it_behaves_like 'an endpoint with a middle page', '.json'
       end
     end
+
+  end
+end
+
+
+describe NumbersManipulatedController, :type => :controller do
+  before { request.host = 'example.org' }
+
+  before do
+    Rails.application.routes.draw do
+      resources 'numbers', only: [:index], controller: 'numbers_manipulated'
+    end
+  end
+
+  after do
+    Rails.application.routes.draw do
+      resources 'numbers', only: [:index], controller: 'numbers'
+    end
+  end
+
+  describe 'GET #index' do
+    let(:links) { response.headers['Link'].split(', ') }
+    let(:total) { response.headers['Total'].to_i }
+
+    context 'without enough items to give more than one page' do
+      before { get :index, :count => 10, :format => 'json' }
+
+      it 'should list the manipulated numbers in the response body' do
+        body = '["111","222","333","444","555","666","777","888","999","101010"]'
+        expect(response.body).to eq(body)
+      end
+    end
+
   end
 end
 
