@@ -24,7 +24,7 @@ if ApiPagination.paginator == :will_paginate
 
     it 'returns a Sequel::Dataset' do
       collection = ApiPagination.paginate(people)
-      expect(collection.kind_of?(Sequel::Dataset)).to be_true
+      expect(collection.kind_of?(Sequel::Dataset)).to be_truthy
     end
   end
 end
