@@ -8,6 +8,3 @@ gem 'will_paginate', require: false
 
 gem 'sqlite3', require: false
 gem 'sequel', require: false
-
-gem 'rake', require: false
-gem 'coveralls', require: false
