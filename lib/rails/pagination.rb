@@ -31,8 +31,8 @@ module Rails
       url   = request.original_url.sub(/\?.*$/, '')
       pages = ApiPagination.pages_from(collection)
 
-      if all
-        (pages[:next]..pages[:last]).each do |page_num|
+      if all && pages[:next].present? && pages[:last].present?
+        (pages[:next].to_i..pages[:last].to_i).each do |page_num|
           new_params = request.query_parameters.merge(:page => page_num)
           links << %(<#{url}?#{new_params.to_param}>)
         end
