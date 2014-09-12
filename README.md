@@ -3,6 +3,7 @@
 [![Build Status][travis-badge]][travis] [![Coverage][coveralls-badge]][coveralls] [![Climate][code-climate-badge]][code-climate] [![Dependencies][gemnasium-badge]][gemnasium] [![gittip][gittip-badge]][gittip]
 
 Paginate in your headers, not in your response body.
+This follows the proposed [RFC-5988](http://tools.ietf.org/html/rfc5988) standard for Web linking.
 
 ## Installation
 
@@ -88,10 +89,10 @@ Then `curl --include` to see your header-based pagination in action:
 ```bash
 $ curl --include 'https://localhost:3000/movies?page=5'
 HTTP/1.1 200 OK
-Link: <http://localhost:3000/movies?page=1>; rel="first">,
-  <http://localhost:3000/movies?page=173>; rel="last">,
-  <http://localhost:3000/movies?page=6>; rel="next">,
-  <http://localhost:3000/movies?page=4>; rel="prev">
+Link: <http://localhost:3000/movies?page=1>; rel="first",
+  <http://localhost:3000/movies?page=173>; rel="last",
+  <http://localhost:3000/movies?page=6>; rel="next",
+  <http://localhost:3000/movies?page=4>; rel="prev"
 Total: 4321
 # ...
 ```
