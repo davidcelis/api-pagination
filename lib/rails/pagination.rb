@@ -2,10 +2,15 @@ module Rails
   module Pagination
     protected
 
-    def paginate(options)
-      collection = options[:json] || options[:xml]
+    def paginate(*options_or_collection)
+      options    = options_or_collection.extract_options!
+      collection = options_or_collection.first
 
-      collection     = _paginate_collection(collection, options)
+      return _paginate_collection(collection, options) if collection
+
+      collection = options[:json] || options[:xml]
+      collection = _paginate_collection(collection, options)
+
       options[:json] = collection if options[:json]
       options[:xml]  = collection if options[:xml]
 

@@ -53,6 +53,16 @@ describe NumbersController, :type => :controller do
         it_behaves_like 'an endpoint with a middle page'
       end
     end
+
+    context 'providing a block' do
+      it 'yields to the block instead of implicitly rendering' do
+        get :index_with_custom_render, :count => 100
+
+        json = { numbers: (1..10).map { |n| { number: n } } }.to_json
+
+        expect(response.body).to eq(json)
+      end
+    end
   end
 end
 

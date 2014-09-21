@@ -39,14 +39,25 @@ module ControllerExampleGroup
 end
 
 Rails.application.routes.draw do
-  resources :numbers, :only => [:index]
+  resources :numbers, :only => [:index] do
+    get :index_with_custom_render, on: :collection
+  end
+end
+
+class NumbersSerializer
+  def initialize(numbers)
+    @numbers = numbers
+  end
+
+  def to_json(options = {})
+    { numbers: @numbers.map { |n| { number: n } } }.to_json
+  end
 end
 
 class NumbersController < ActionController::Base
   include Rails.application.routes.url_helpers
 
   def index
-    page = params.fetch(:page, 1).to_i
     total = params.fetch(:count).to_i
 
     if params[:with_headers]
@@ -56,5 +67,13 @@ class NumbersController < ActionController::Base
     end
 
     paginate :json => (1..total).to_a, :per_page => 10
+  end
+
+  def index_with_custom_render
+    total   = params.fetch(:count).to_i
+    numbers = (1..total).to_a
+    numbers = paginate numbers, :per_page => 10
+
+    render json: NumbersSerializer.new(numbers)
   end
 end

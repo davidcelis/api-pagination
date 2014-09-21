@@ -25,7 +25,7 @@ gem 'api-pagination'
 
 ## Rails
 
-In your controller, provide a pageable collection to the `paginate` method:
+In your controller, provide a pageable collection to the `paginate` method. In its most convenient form, `paginate` simply mimics `render`:
 
 ```ruby
 class MoviesController < ApplicationController
@@ -47,18 +47,33 @@ class MoviesController < ApplicationController
 end
 ```
 
-`paginate` will:
+This will pull your collection from the `json` or `xml` option, paginate it for you using `params[:page]` and `params[:per_page]`, render Link headers, and call `ActionController::Base#render` with whatever you passed to `paginate`. This should work well with [ActiveModel::Serializers](https://github.com/rails-api/active_model-serializers). However, if you need more control over what is done with your paginated collection, you can pass the collection directly to `paginate` instead of in a way that mimics `render`:
 
-1. Pull your collection from `json:` or `xml:`
-2. Use `params[:page]` and `params[:per_page]` to paginate your collection for you
-3. Use the paginated collection to render `Link` headers
-4. Call `ActionController::Base#render` with whatever you passed to `paginate`.
+```ruby
+class MoviesController < ApplicationController
+  # GET /movies
+  def index
+    movies = paginate Movie.all
 
-The collection sent to `paginate` _must_ respond to your paginator's methods. For Kaminari, `Kaminari.paginate_array` will be called for you behind-the-scenes. For WillPaginate, you're out of luck unless you somewhere `require 'will_paginate/array'`. Because this pollutes `Array`, it won't be done for you automatically.
+    render json: MoviesSerializer.new(movies)
+  end
+
+  # GET /movies/:id/cast
+  def cast
+    actors = paginate Movie.find(params[:id]).actors, per_page: 10
+
+    render json: ActorsSerializer.new(actors)
+  end
+end
+```
+
+This will avoid implicitly calling `render` at the end. Instead, `paginate` will simply set up the headers and return your collection so you can do whatever you want with it.
+
+Note that the collection sent to `paginate` _must_ respond to your paginator's methods. For Kaminari, `Kaminari.paginate_array` will be called for you behind-the-scenes. For WillPaginate, you're out of luck unless you call `require 'will_paginate/array'` somewhere. Because this pollutes `Array`, it won't be done for you automatically.
 
 ## Grape
 
-Grape is similar, though `paginate` won't take options. Only your collection. In your API endpoint:
+With Grape, `paginate` is used to declare that your endpoint takes a `:page` and `:per_page` param. Inside your API endpoint, it simply takes your collection:
 
 ```ruby
 class MoviesAPI < Grape::API
