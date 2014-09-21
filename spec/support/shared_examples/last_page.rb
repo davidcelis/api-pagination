@@ -1,4 +1,4 @@
-shared_examples 'an endpoint with a last page' do
+shared_examples 'an endpoint with a last page' do |use_format=nil|
   it 'should not give a link with rel "last"' do
     expect(links).not_to include('rel="last"')
   end
@@ -8,11 +8,11 @@ shared_examples 'an endpoint with a last page' do
   end
 
   it 'should give a link with rel "first"' do
-    expect(links).to include('<http://example.org/numbers?count=100&page=1>; rel="first"')
+    expect(links).to include(%(<http://example.org/numbers#{use_format}?count=100&page=1>; rel="first"))
   end
 
   it 'should give a link with rel "prev"' do
-    expect(links).to include('<http://example.org/numbers?count=100&page=9>; rel="prev"')
+    expect(links).to include(%(<http://example.org/numbers#{use_format}?count=100&page=9>; rel="prev"))
   end
 
   it 'should give a Total header' do

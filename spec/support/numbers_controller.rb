@@ -77,3 +77,42 @@ class NumbersController < ActionController::Base
     render json: NumbersSerializer.new(numbers)
   end
 end
+
+class NumbersResponderController < ActionController::Base
+  include Rails.application.routes.url_helpers
+
+  respond_to :json
+
+  def index
+    page = params.fetch(:page, 1).to_i
+    total = params.fetch(:count).to_i
+
+    if params[:with_headers]
+      query = request.query_parameters.dup
+      query.delete(:with_headers)
+      headers['Link'] = %(<#{numbers_url(:format => params[:format])}?#{query.to_param}>; rel="without")
+    end
+
+    paginate_with (1..total).to_a, :per_page => 10
+  end
+end
+
+class NumbersManipulatedController < ActionController::Base
+  include Rails.application.routes.url_helpers
+
+  respond_to :json
+
+  def index
+    page = params.fetch(:page, 1).to_i
+    total = params.fetch(:count).to_i
+    paginate_with (1..total).to_a, :per_page => 10 do |collection|
+      manipulate(collection)
+    end
+  end
+
+  protected
+
+  def manipulate(collection)
+    collection.map{|obj| obj.to_s * 3}
+  end
+end
