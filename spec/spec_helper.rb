@@ -1,7 +1,3 @@
-require 'support/numbers_controller'
-require 'support/numbers_api'
-require 'api-pagination'
-
 if ENV['PAGINATOR']
   ApiPagination.instance_variable_set(:@paginator, ENV['PAGINATOR'].to_sym)
 else
@@ -9,11 +5,11 @@ else
   ApiPagination.instance_variable_set(:@paginator, :kaminari)
 end
 
-if ApiPagination.paginator == :kaminari
-  Kaminari::Hooks.init
-elsif ApiPagination.paginator == :will_paginate
-  require 'will_paginate/array'
-end
+require 'support/numbers_controller'
+require 'support/numbers_api'
+require 'api-pagination'
+
+require 'will_paginate/array' if ApiPagination.paginator == :will_paginate
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods

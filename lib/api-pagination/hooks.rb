@@ -18,12 +18,14 @@ module ApiPagination
         require 'grape/pagination'
         Grape::API.send(:include, Grape::Pagination)
       end
+
       # Kaminari and will_paginate conflict with each other, so we should check
       # to see if either is already active before attempting to load them.
       if defined?(Kaminari) && defined?(WillPaginate::CollectionMethods)
         STDERR.puts <<-EOC
-  Warning: api-pagination relies on either Kaminari or WillPaginate, but these
-  gems conflict.  Please ensure only one of them is active at any given time.
+Warning: api-pagination relies on either Kaminari or WillPaginate, but these
+gems conflict.  Please ensure only one of them is active at any given time.
+
 EOC
         return
       elsif defined?(Kaminari)
@@ -57,6 +59,7 @@ EOC
     end
 
     def self.initialize_kaminari!
+      require 'kaminari/models/array_extension'
       ApiPagination.instance_variable_set(:@paginator, :kaminari)
     end
 
@@ -69,10 +72,6 @@ EOC
       ApiPagination.instance_variable_set(:@paginator, :will_paginate)
     end
   end
-end
-
-if ENV['PAGINATOR']
-  ApiPagination.instance_variable_set(:@paginator, ENV['PAGINATOR'].to_sym)
 end
 
 ApiPagination::Hooks.init!
