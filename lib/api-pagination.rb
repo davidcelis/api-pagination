@@ -1,4 +1,3 @@
-require 'api-pagination/hooks'
 require 'api-pagination/version'
 
 module ApiPagination
@@ -19,6 +18,8 @@ module ApiPagination
         else
           collection.paginate(:page => options[:page], :per_page => options[:per_page])
         end
+      else
+        fail StandardError, "Unknown paginator: #{ApiPagination.paginator}"
       end
     end
 
@@ -44,3 +45,5 @@ module ApiPagination
     end
   end
 end
+
+require 'api-pagination/hooks'
