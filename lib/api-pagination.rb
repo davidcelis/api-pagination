@@ -6,13 +6,15 @@ module ApiPagination
 
     def paginate(collection, options = {})
       options[:page]     ||= 1
-      options[:per_page] = (options[:per_page].to_i <= 0 ? 25 : options[:per_page])
 
       case ApiPagination.paginator
       when :kaminari
+        options[:per_page] = (options[:per_page].to_i <= 0 ? Kaminari.config.default_per_page : options[:per_page])
+        options[:per_page] = (options[:per_page].to_i > Kaminari.config.max_per_page ? Kaminari.config.max_per_page : options[:per_page])
         collection = Kaminari.paginate_array(collection) if collection.is_a?(Array)
         collection.page(options[:page]).per(options[:per_page])
       when :will_paginate
+        options[:per_page] = (options[:per_page].to_i <= 0 ? WillPaginate.per_page : options[:per_page])
         if defined?(Sequel::Dataset) && collection.kind_of?(Sequel::Dataset)
           collection.paginate(options[:page], options[:per_page])
         else
