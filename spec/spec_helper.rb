@@ -1,5 +1,6 @@
 require 'support/numbers_controller'
 require 'support/numbers_api'
+require 'support/numbers_proxied_api'
 require 'api-pagination'
 
 if ENV['PAGINATOR']
@@ -31,6 +32,8 @@ RSpec.configure do |config|
   config.order = 'random'
 
   def app
-    NumbersAPI
+    # Allows us to test different API apps.
+    # e.g. NumbersApi, NumbersProxiedApi...
+    described_class
   end
 end

@@ -53,3 +53,19 @@ describe NumbersAPI do
     end
   end
 end
+
+describe NumbersProxiedAPI do
+  describe 'GET #index' do
+    let(:links) { last_response.headers['Link'].split(', ') }
+    let(:total) { last_response.headers['Total'].to_i }
+
+    context 'with existing Link headers' do
+      before { get "/api/numbers", :count => 30 }
+
+      it 'should contain relative pagination Links without base path' do
+        expect(links).to include('</numbers?count=30&page=2>; rel="next"')
+        expect(links).to include('</numbers?count=30&page=3>; rel="last"')
+      end
+    end
+  end
+end
