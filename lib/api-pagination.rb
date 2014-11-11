@@ -5,23 +5,29 @@ module ApiPagination
     attr_reader :paginator
 
     def paginate(collection, options = {})
-      options[:page]     ||= 1
+      options[:page]     = options[:page].to_i
+      options[:page]     = 1 if options[:page] <= 0
+      options[:per_page] = options[:per_page].to_i
 
       case ApiPagination.paginator
       when :kaminari
-        options[:per_page] = (options[:per_page].to_i <= 0 ? Kaminari.config.default_per_page : options[:per_page])
-        options[:per_page] = (options[:per_page].to_i > Kaminari.config.max_per_page ? Kaminari.config.max_per_page : options[:per_page]) if Kaminari.config.max_per_page
+        if Kaminari.config.max_per_page && options[:per_page] > Kaminari.config.max_per_page
+          options[:per_page] = Kaminari.config.max_per_page
+        elsif options[:per_page] <= 0
+          options[:per_page] = Kaminari.config.default_per_page
+        end
         collection = Kaminari.paginate_array(collection) if collection.is_a?(Array)
         collection.page(options[:page]).per(options[:per_page])
       when :will_paginate
-        options[:per_page] = (options[:per_page].to_i <= 0 ? WillPaginate.per_page : options[:per_page])
+        options[:per_page] = WillPaginate.per_page if options[:per_page] <= 0
+
         if defined?(Sequel::Dataset) && collection.kind_of?(Sequel::Dataset)
           collection.paginate(options[:page], options[:per_page])
         else
           collection.paginate(:page => options[:page], :per_page => options[:per_page])
         end
       else
-        fail StandardError, "Unknown paginator: #{ApiPagination.paginator}"
+        raise StandardError, "Unknown paginator: #{ApiPagination.paginator}"
       end
     end
 
