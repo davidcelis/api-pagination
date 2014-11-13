@@ -66,7 +66,7 @@ class NumbersController < ActionController::Base
       headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without")
     end
 
-    paginate :json => (1..total).to_a, :per_page => 10
+    paginate :json => (1..total).to_a, :per_page => params[:per_page] || 10, :max_per_page => 20
   end
 
   def index_with_custom_render

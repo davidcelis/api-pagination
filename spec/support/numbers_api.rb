@@ -5,7 +5,7 @@ class NumbersAPI < Grape::API
   format :json
 
   desc 'Return some paginated set of numbers'
-  paginate :per_page => 10
+  paginate :per_page => 10, :max_per_page => 20
   params do
     requires :count, :type => Integer
     optional :with_headers, :default => false, :type => Boolean

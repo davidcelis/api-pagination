@@ -26,6 +26,18 @@ describe NumbersAPI do
       end
     end
 
+    context 'with per_page larger than max_per_page' do
+      before { get :numbers, :count => 100, :per_page => 50 }
+
+      it 'should only return max_per_page items' do
+        expect(last_response.body).to eq('[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]')
+      end
+
+      it 'should correct the per_page parameter in links' do
+        expect(links).to include('<http://example.org/numbers?count=100&page=5&per_page=20>; rel="last"')
+      end
+    end
+
     context 'with existing Link headers' do
       before { get :numbers, :count => 30, :with_headers => true }
 
