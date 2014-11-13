@@ -25,14 +25,17 @@ module Rails
 
     def _paginate_collection(collection, options={})
       options = {
-        :page     => params[:page],
-        :per_page => (options.delete(:per_page) || params[:per_page])
+        :page         => params[:page],
+        :per_page     => (options.delete(:per_page) || params[:per_page]),
+        :max_per_page => options[:max_per_page]
       }
       collection = ApiPagination.paginate(collection, options)
 
       links = (headers['Link'] || "").split(',').map(&:strip)
       url   = request.original_url.sub(/\?.*$/, '')
       pages = ApiPagination.pages_from(collection)
+
+      request.query_parameters[:per_page] = options[:per_page] if request.query_parameters[:per_page]
 
       pages.each do |k, v|
         new_params = request.query_parameters.merge(:page => v)
