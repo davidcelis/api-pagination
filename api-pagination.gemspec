@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_development_dependency 'rspec', '~> 3.0'
-  s.add_development_dependency 'grape'
+  s.add_development_dependency 'grape', '>= 0.10.0'
   s.add_development_dependency 'railties', '>= 3.0.0'
   s.add_development_dependency 'actionpack', '>= 3.0.0'
   s.add_development_dependency 'sequel', '>= 4.9.0'
