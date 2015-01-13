@@ -10,10 +10,12 @@ This follows the proposed [RFC-5988](http://tools.ietf.org/html/rfc5988) standar
 In your `Gemfile`:
 
 ```ruby
-# Requires Rails (Rails-API is also supported) or Grape.
+# Requires Rails (Rails-API is also supported), or Grape
+# v0.10.0 or later. If you're on an earlier version of
+# Grape, use api-pagination ~> 3.1
 gem 'rails', '>= 3.0.0'
 gem 'rails-api'
-gem 'grape'
+gem 'grape', '>= 0.10.0'
 
 # Then choose your preferred paginator from the following:
 gem 'kaminari'
