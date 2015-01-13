@@ -5,7 +5,7 @@ module Grape
         def paginate(collection)
           options = {
             :page     => params[:page],
-            :per_page => (params[:per_page] || settings[:per_page])
+            :per_page => (params[:per_page] || route_setting(:per_page))
           }
           collection = ApiPagination.paginate(collection, options)
 
@@ -28,7 +28,7 @@ module Grape
 
       base.class_eval do
         def self.paginate(options = {})
-          set :per_page, (options[:per_page] || 25)
+          route_setting :per_page, (options[:per_page] || 25)
           params do
             optional :page,     :type => Integer, :default => 1,
                                 :desc => 'Page of results to fetch.'
