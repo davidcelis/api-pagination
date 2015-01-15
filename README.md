@@ -111,6 +111,7 @@ Link: <http://localhost:3000/movies?page=1>; rel="first",
   <http://localhost:3000/movies?page=6>; rel="next",
   <http://localhost:3000/movies?page=4>; rel="prev"
 Total: 4321
+Per-Page: 10
 # ...
 ```
 
