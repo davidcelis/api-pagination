@@ -10,6 +10,7 @@ describe NumbersController, :type => :controller do
   describe 'GET #index' do
     let(:links) { response.headers['Link'].split(', ') }
     let(:total) { response.headers['Total'].to_i }
+    let(:per_page) { response.headers['Per-Page'].to_i }
 
     context 'without enough items to give more than one page' do
       before { get :index, :count => 10 }
@@ -20,6 +21,10 @@ describe NumbersController, :type => :controller do
 
       it 'should give a Total header' do
         expect(total).to eq(10)
+      end
+
+      it 'should give a Per-Page header' do
+        expect(per_page).to eq(10)
       end
 
       it 'should list all numbers in the response body' do
@@ -65,8 +70,3 @@ describe NumbersController, :type => :controller do
     end
   end
 end
-
-
-
-
-

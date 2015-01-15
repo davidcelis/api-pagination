@@ -19,8 +19,9 @@ module Grape
             links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
           end
 
-          header 'Link', links.join(', ') unless links.empty?
-          header 'Total', ApiPagination.total_from(collection)
+          header 'Link',     links.join(', ') unless links.empty?
+          header 'Total',    ApiPagination.total_from(collection)
+          header 'Per-Page', options[:per_page]
 
           return collection
         end
