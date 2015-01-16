@@ -55,6 +55,16 @@ describe NumbersAPI do
 
         it_behaves_like 'an endpoint with a middle page'
       end
+
+      context 'with a max_per_page setting' do
+        before { get '/numbers', :count => 100, :per_page => 30 }
+
+        it 'should not go above the max_per_page_limit' do
+          body = '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]'
+
+          expect(last_response.body).to eq(body)
+        end
+      end
     end
   end
 end
