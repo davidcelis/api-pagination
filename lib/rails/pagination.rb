@@ -39,9 +39,12 @@ module Rails
         links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
       end
 
-      headers['Link']     = links.join(', ') unless links.empty?
-      headers['Total']    = ApiPagination.total_from(collection)
-      headers['Per-Page'] = options[:per_page]
+      total_header = ApiPagination.total_header
+      per_page_header = ApiPagination.per_page_header
+
+      headers['Link']          = links.join(', ') unless links.empty?
+      headers[total_header]    = ApiPagination.total_from(collection)
+      headers[per_page_header] = options[:per_page]
 
       return collection
     end
