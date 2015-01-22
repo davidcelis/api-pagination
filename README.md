@@ -100,6 +100,8 @@ class MoviesAPI < Grape::API
 end
 ```
 
+## Headers
+
 Then `curl --include` to see your header-based pagination in action:
 
 ```bash
@@ -111,6 +113,27 @@ Link: <http://localhost:3000/movies?page=1>; rel="first",
   <http://localhost:3000/movies?page=4>; rel="prev"
 Total: 4321
 Per-Page: 10
+# ...
+```
+
+If you want, you can customize the name of `Total` and `Per-Page` headers.  
+All you need to do is to set the `total_header` or `per_page_header` on `ApiPagination`.  
+If nothing is setted it defaults to `Total` and `Per-Page`.
+
+```ruby
+ApiPagination.total_header = 'X-Total-Count'
+ApiPagination.per_page_header = 'X-Per-Page'
+```
+
+```bash
+$ curl --include 'https://localhost:3000/movies?page=5'
+HTTP/1.1 200 OK
+Link: <http://localhost:3000/movies?page=1>; rel="first",
+  <http://localhost:3000/movies?page=173>; rel="last",
+  <http://localhost:3000/movies?page=6>; rel="next",
+  <http://localhost:3000/movies?page=4>; rel="prev"
+X-Total-Count: 4321
+X-Per-Page: 10
 # ...
 ```
 
