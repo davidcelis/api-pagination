@@ -41,7 +41,7 @@ module Rails
 
       headers['Link']     = links.join(', ') unless links.empty?
       headers['Total']    = ApiPagination.total_from(collection)
-      headers['Per-Page'] = options[:per_page]
+      headers['Per-Page'] = options[:per_page].to_s
 
       return collection
     end
