@@ -68,5 +68,38 @@ describe NumbersController, :type => :controller do
         expect(response.body).to eq(json)
       end
     end
+
+    context 'with custom response headers' do
+      before do
+        ApiPagination.total_header = 'X-Total-Count'
+        ApiPagination.per_page_header = 'X-Per-Page'
+
+        get :index, count: 10
+      end
+
+      after do
+        ApiPagination.total_header = nil
+        ApiPagination.per_page_header = nil
+      end
+
+      let(:total) { response.header['X-Total-Count'].to_i }
+      let(:per_page) { response.header['X-Per-Page'].to_i }
+
+      it 'should give a X-Total-Count header' do
+        headers_keys = response.headers.keys
+
+        expect(headers_keys).not_to include('Total')
+        expect(headers_keys).to include('X-Total-Count')
+        expect(total).to eq(10)
+      end
+
+      it 'should give a Per-Page header' do
+        headers_keys = response.headers.keys
+
+        expect(headers_keys).not_to include('Per-Page')
+        expect(headers_keys).to include('X-Per-Page')
+        expect(per_page).to eq(10)
+      end
+    end
   end
 end
