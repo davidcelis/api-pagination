@@ -3,6 +3,7 @@ require 'api-pagination/version'
 module ApiPagination
   class << self
     attr_reader :paginator
+    attr_writer :total_header, :per_page_header
 
     def paginate(collection, options = {})
       options[:page]     = options[:page].to_i
@@ -50,6 +51,14 @@ module ApiPagination
         when :kaminari      then collection.total_count.to_s
         when :will_paginate then collection.total_entries.to_s
       end
+    end
+
+    def total_header
+      @total_header ||= 'Total'
+    end
+
+    def per_page_header
+      @per_page_header ||= 'Per-Page'
     end
   end
 end
