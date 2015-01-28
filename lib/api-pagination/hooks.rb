@@ -19,43 +19,44 @@ module ApiPagination
         Grape::API.send(:include, Grape::Pagination)
       end
 
-      # Kaminari and will_paginate conflict with each other, so we should check
-      # to see if either is already active before attempting to load them.
-      if defined?(Kaminari) && defined?(WillPaginate::CollectionMethods)
-        STDERR.puts <<-EOC
-Warning: api-pagination relies on either Kaminari or WillPaginate, but these
-gems conflict.  Please ensure only one of them is active at any given time.
-
-EOC
-        return
-      elsif defined?(Kaminari)
-        initialize_kaminari! and return
-      elsif defined?(WillPaginate::CollectionMethods)
-        initialize_will_paginate! and return
-      end
-      # If neither is loaded, we can safely attempt these requires.
-      unless ApiPagination.paginator == :will_paginate
-        begin
-          require 'kaminari'
-          initialize_kaminari! and return
-        rescue LoadError
-        end
+      # Make sure kaminari or will paginate are defined
+      begin
+        require 'kaminari'
+      rescue LoadError
       end
 
       begin
         require 'will_paginate'
-        initialize_will_paginate! and return
       rescue LoadError
       end
 
-      STDERR.puts <<-EOC
-Warning: api-pagination relies on either Kaminari or WillPaginate. Please
-install either dependency by adding one of the following to your Gemfile:
+      if _no_paginator_found?
+        STDERR.puts <<-EOC
+  Warning: api-pagination relies on either Kaminari or WillPaginate. Please
+  install either dependency by adding one of the following to your Gemfile:
 
-gem 'kaminari'
-gem 'will_paginate'
+  gem 'kaminari'
+  gem 'will_paginate'
 
-EOC
+  EOC
+      end
+
+      case ApiPagination.paginator
+      when :will_paginate
+        initialize_will_paginate! and return
+      when :kaminari
+        initialize_kaminari! and return
+      when nil
+        if _cannot_infer_paginator?
+          STDERR.puts <<-EOC
+  Warning: api-pagination relies on either Kaminari or WillPaginate, but these
+  gems conflict. Please set ApiPagination.paginator in an initializer.
+
+  EOC
+          return
+        end
+      end
+
     end
 
     def self.initialize_kaminari!
@@ -71,7 +72,14 @@ EOC
 
       ApiPagination.instance_variable_set(:@paginator, :will_paginate)
     end
+
+    def self._cannot_infer_paginator?
+      defined?(Kaminari) &&
+        defined?(WillPaginate::CollectionMethods) && ApiPagination.paginator.nil?
+    end
+
+    def self._no_paginator_found?
+      !defined?(Kaminari) && !defined?(WillPaginate::CollectionMethods)
+    end
   end
 end
-
-ApiPagination::Hooks.init!
