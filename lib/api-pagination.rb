@@ -1,9 +1,15 @@
 require 'api-pagination/version'
+require 'api-pagination/hooks'
 
 module ApiPagination
   class << self
-    attr_reader :paginator
-    attr_writer :total_header, :per_page_header
+    attr_accessor :paginator
+    attr_writer   :total_header, :per_page_header
+
+    def config
+      yield(self) if block_given?
+      ApiPagination::Hooks.init!
+    end
 
     def paginate(collection, options = {})
       options[:page]     = options[:page].to_i
@@ -62,5 +68,3 @@ module ApiPagination
     end
   end
 end
-
-require 'api-pagination/hooks'
