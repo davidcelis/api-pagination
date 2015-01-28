@@ -41,12 +41,11 @@ module ApiPagination
   EOC
       end
 
-
       case ApiPagination.paginator
       when :will_paginate
-        initialize_kaminari! and return
-      when :kaminari
         initialize_will_paginate! and return
+      when :kaminari
+        initialize_kaminari! and return
       when nil
         if _cannot_infer_paginator?
           STDERR.puts <<-EOC
