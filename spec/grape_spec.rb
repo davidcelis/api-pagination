@@ -69,15 +69,15 @@ describe NumbersAPI do
 
     context 'with custom response headers' do
       before do
-        ApiPagination.total_header    = 'X-Total-Count'
-        ApiPagination.per_page_header = 'X-Per-Page'
+        ApiPagination.config.total_header    = 'X-Total-Count'
+        ApiPagination.config.per_page_header = 'X-Per-Page'
 
         get '/numbers', count: 10
       end
 
       after do
-        ApiPagination.total_header    = nil
-        ApiPagination.per_page_header = nil
+        ApiPagination.config.total_header    = 'Total'
+        ApiPagination.config.per_page_header = 'Per-Page'
       end
 
       let(:total) { last_response.header['X-Total-Count'].to_i }

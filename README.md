@@ -25,6 +25,23 @@ gem 'will_paginate'
 gem 'api-pagination'
 ```
 
+## Configuration (optional)
+
+By default, api-pagination will detect whether you're using Kaminari or WillPaginate, and name headers appropriately. If you want to change any of the configurable settings, you may do so:
+
+```ruby
+ApiPagination.configure do |config|
+  # If you have both gems included, you can choose a paginator.
+  config.paginator = :kaminari # or :will_paginate
+
+  # By default, this is set to 'Total'
+  config.total_header = 'X-Total'
+
+  # By default, this is set to 'Per-Page'
+  config.per_page_header = 'X-Per-Page'
+end
+```
+
 ## Rails
 
 In your controller, provide a pageable collection to the `paginate` method. In its most convenient form, `paginate` simply mimics `render`:
@@ -113,27 +130,6 @@ Link: <http://localhost:3000/movies?page=1>; rel="first",
   <http://localhost:3000/movies?page=4>; rel="prev"
 Total: 4321
 Per-Page: 10
-# ...
-```
-
-If you want, you can customize the name of `Total` and `Per-Page` headers.  
-All you need to do is to set the `total_header` or `per_page_header` on `ApiPagination`.  
-If nothing is setted it defaults to `Total` and `Per-Page`.
-
-```ruby
-ApiPagination.total_header = 'X-Total-Count'
-ApiPagination.per_page_header = 'X-Per-Page'
-```
-
-```bash
-$ curl --include 'https://localhost:3000/movies?page=5'
-HTTP/1.1 200 OK
-Link: <http://localhost:3000/movies?page=1>; rel="first",
-  <http://localhost:3000/movies?page=173>; rel="last",
-  <http://localhost:3000/movies?page=6>; rel="next",
-  <http://localhost:3000/movies?page=4>; rel="prev"
-X-Total-Count: 4321
-X-Per-Page: 10
 # ...
 ```
 

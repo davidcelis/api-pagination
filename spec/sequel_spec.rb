@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-if ApiPagination.paginator == :will_paginate
+if ApiPagination.config.paginator == :will_paginate
   require 'sqlite3'
   require 'sequel'
   require 'will_paginate/sequel'

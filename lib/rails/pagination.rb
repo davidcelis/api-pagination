@@ -39,8 +39,8 @@ module Rails
         links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
       end
 
-      total_header    = ApiPagination.total_header
-      per_page_header = ApiPagination.per_page_header
+      total_header    = ApiPagination.config.total_header
+      per_page_header = ApiPagination.config.per_page_header
 
       headers['Link']          = links.join(', ') unless links.empty?
       headers[total_header]    = ApiPagination.total_from(collection)
