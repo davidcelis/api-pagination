@@ -1,7 +1,5 @@
 module ApiPagination
   class Configuration
-    attr_reader :paginator
-
     attr_accessor :total_header
 
     attr_accessor :per_page_header
@@ -13,7 +11,10 @@ module ApiPagination
     def initialize
       @total_header    = 'Total'
       @per_page_header = 'Per-Page'
-      set_paginator
+    end
+
+    def paginator
+      @paginator || set_paginator
     end
 
     def paginator=(paginator)
@@ -67,6 +68,8 @@ gem 'kaminari'
 gem 'will_paginate'
 
 WARNING
+
+      @paginator
     end
 
     def use_kaminari
