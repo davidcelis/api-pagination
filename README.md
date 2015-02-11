@@ -133,6 +133,25 @@ Per-Page: 10
 # ...
 ```
 
+## A Note on Kaminari and WillPaginate
+
+api-pagination requires either Kaminari or WillPaginate in order to function, but some users may find themselves in situations where their application includes both. For example, you may have included [ActiveAdmin][activeadmin] (which uses Kaminari for pagination) and WillPaginate to do your own pagination. While it's suggested that you remove one paginator gem or the other, if you're unable to do so, you _must_ configure api-pagination explicitly:
+
+```ruby
+ApiPagination.configure do |config|
+  config.paginator = :will_paginate
+end
+```
+
+If you don't do this, an annoying warning will print once your app starts seeing traffic. You should also configure Kaminari to use a different name for its `per_page` method (see https://github.com/activeadmin/activeadmin/wiki/How-to-work-with-will_paginate):
+
+```ruby
+Kaminari.configure do |config|
+  config.page_method_name = :per_page_kaminari
+end
+```
+
+[activeadmin]: https://github.com/activeadmin/activeadmin
 [kaminari]: https://github.com/amatsuda/kaminari
 [will_paginate]: https://github.com/mislav/will_paginate
 
