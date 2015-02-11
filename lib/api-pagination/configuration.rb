@@ -1,7 +1,5 @@
 module ApiPagination
   class Configuration
-    attr_reader :paginator
-
     attr_accessor :total_header
 
     attr_accessor :per_page_header
@@ -13,11 +11,14 @@ module ApiPagination
     def initialize
       @total_header    = 'Total'
       @per_page_header = 'Per-Page'
-      set_paginator
+    end
+
+    def paginator
+      @paginator || set_paginator
     end
 
     def paginator=(paginator)
-      case paginator
+      case paginator.to_sym
       when :kaminari
         use_kaminari
       when :will_paginate
@@ -34,39 +35,26 @@ module ApiPagination
         Kernel.warn <<-WARNING
 Warning: api-pagination relies on either Kaminari or WillPaginate, but both are
 currently active. If possible, you should remove one or the other. If you can't,
-you must configure api-pagination on your own. For example:
+you _must_ configure api-pagination on your own. For example:
 
 ApiPagination.configure do |config|
-  config.paginator = Kaminari
+  config.paginator = :kaminari
+end
+
+You should also configure Kaminari to use a different `per_page` method name as
+using these gems together causes a conflict; some information can be found at
+https://github.com/activeadmin/activeadmin/wiki/How-to-work-with-will_paginate
+
+Kaminari.configure do |config|
+  config.page_method_name = :per_page_kaminari
 end
 
 WARNING
       elsif defined?(Kaminari)
-        use_kaminari and return
+        return use_kaminari
       elsif defined?(WillPaginate::CollectionMethods)
-        use_will_paginate and return
+        return use_will_paginate
       end
-
-      begin
-        require 'kaminari'
-        use_kaminari and return
-      rescue LoadError
-      end
-
-      begin
-        require 'will_paginate'
-        use_will_paginate and return
-      rescue LoadError
-      end
-
-      Kernel.warn <<-WARNING
-Warning: api-pagination relies on either Kaminari or WillPaginate. Please
-install either dependency by adding one of the following to your Gemfile:
-
-gem 'kaminari'
-gem 'will_paginate'
-
-WARNING
     end
 
     def use_kaminari
