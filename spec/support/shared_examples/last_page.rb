@@ -19,6 +19,14 @@ shared_examples 'an endpoint with a last page' do
     expect(total).to eq(100)
   end
 
+  it 'should give a Current-Page header' do
+    expect(current_page).to eq(10)
+  end
+
+  it 'should give a Total-Pages header' do
+    expect(total_pages).to eq(10)
+  end
+
   it 'should list the last page of numbers in the response body' do
     body = '[91,92,93,94,95,96,97,98,99,100]'
 

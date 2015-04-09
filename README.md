@@ -39,6 +39,12 @@ ApiPagination.configure do |config|
 
   # By default, this is set to 'Per-Page'
   config.per_page_header = 'X-Per-Page'
+
+  # By default, this is set to 'Current-Page'
+  config.current_page_header = 'X-Current-Page'
+
+  # By default, this is set to 'Total-Pages'
+  config.total_pages_header = 'X-Total-Pages'
 end
 ```
 
@@ -130,6 +136,8 @@ Link: <http://localhost:3000/movies?page=1>; rel="first",
   <http://localhost:3000/movies?page=4>; rel="prev"
 Total: 4321
 Per-Page: 10
+Current-Page: 5
+Total-Pages: 433
 # ...
 ```
 

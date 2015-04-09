@@ -19,6 +19,14 @@ shared_examples 'an endpoint with a first page' do
     expect(total).to eq(100)
   end
 
+  it 'should give a Current-Page header' do
+    expect(current_page).to eq(1)
+  end
+
+  it 'should give a Total-Pages header' do
+    expect(total_pages).to eq(10)
+  end
+
   it 'should list the first page of numbers in the response body' do
     body = '[1,2,3,4,5,6,7,8,9,10]'
     if defined?(response)
