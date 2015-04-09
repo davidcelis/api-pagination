@@ -1,16 +1,16 @@
 module ApiPagination
   class Configuration
-    attr_accessor :total_header
-
-    attr_accessor :per_page_header
+    attr_accessor :total_header, :per_page_header, :current_page_header, :total_pages_header
 
     def configure(&block)
       yield self
     end
 
     def initialize
-      @total_header    = 'Total'
-      @per_page_header = 'Per-Page'
+      @total_header         = 'Total'
+      @per_page_header      = 'Per-Page'
+      @current_page_header  = 'Current-Page'
+      @total_pages_header   = 'Total-Pages'
     end
 
     def paginator

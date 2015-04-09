@@ -11,4 +11,12 @@ shared_examples 'an endpoint with existing Link headers' do
   it 'should give a Total header' do
     expect(total).to eq(30)
   end
+
+  it 'should give a Current-Page header' do
+    expect(current_page).to eq(1)
+  end
+
+  it 'should give a Total-Pages header' do
+    expect(total_pages).to eq(3)
+  end
 end

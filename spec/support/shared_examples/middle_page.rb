@@ -10,6 +10,14 @@ shared_examples 'an endpoint with a middle page' do
     expect(total).to eq(100)
   end
 
+  it 'should give a Current-Page header' do
+    expect(current_page).to eq(2)
+  end
+
+  it 'should give a Total-Pages header' do
+    expect(total_pages).to eq(10)
+  end
+
   it 'should list a middle page of numbers in the response body' do
     body = '[11,12,13,14,15,16,17,18,19,20]'
 

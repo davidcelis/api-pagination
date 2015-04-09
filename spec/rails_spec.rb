@@ -8,9 +8,11 @@ describe NumbersController, :type => :controller do
   before { request.host = 'example.org' }
 
   describe 'GET #index' do
-    let(:links) { response.headers['Link'].split(', ') }
-    let(:total) { response.headers['Total'].to_i }
-    let(:per_page) { response.headers['Per-Page'].to_i }
+    let(:links)         { response.headers['Link'].split(', ') }
+    let(:total)         { response.headers['Total'].to_i }
+    let(:per_page)      { response.headers['Per-Page'].to_i }
+    let(:current_page)  { response.headers['Current-Page'].to_i }
+    let(:total_pages)   { response.headers['Total-Pages'].to_i }
 
     context 'without enough items to give more than one page' do
       before { get :index, :count => 10 }
@@ -25,6 +27,14 @@ describe NumbersController, :type => :controller do
 
       it 'should give a Per-Page header' do
         expect(per_page).to eq(10)
+      end
+
+      it 'should give a Current-Page header' do
+        expect(current_page).to eq(1)
+      end
+
+      it 'should give a Total-Pages header' do
+        expect(total_pages).to eq(1)
       end
 
       it 'should list all numbers in the response body' do
@@ -71,19 +81,25 @@ describe NumbersController, :type => :controller do
 
     context 'with custom response headers' do
       before do
-        ApiPagination.config.total_header    = 'X-Total-Count'
-        ApiPagination.config.per_page_header = 'X-Per-Page'
+        ApiPagination.config.total_header         = 'X-Total-Count'
+        ApiPagination.config.per_page_header      = 'X-Per-Page'
+        ApiPagination.config.current_page_header  = 'X-Current-Page'
+        ApiPagination.config.total_pages_header   = 'X-Total-Pages'
 
         get :index, count: 10
       end
 
       after do
-        ApiPagination.config.total_header    = 'Total'
-        ApiPagination.config.per_page_header = 'Per-Page'
+        ApiPagination.config.total_header         = 'Total'
+        ApiPagination.config.per_page_header      = 'Per-Page'
+        ApiPagination.config.current_page_header  = 'Current-Page'
+        ApiPagination.config.total_pages_header   = 'Total-Pages'
       end
 
-      let(:total) { response.header['X-Total-Count'].to_i }
-      let(:per_page) { response.header['X-Per-Page'].to_i }
+      let(:total)         { response.header['X-Total-Count'].to_i }
+      let(:per_page)      { response.header['X-Per-Page'].to_i }
+      let(:current_page)  { response.header['X-Current-Page'].to_i }
+      let(:total_pages)   { response.header['X-Total-Pages'].to_i }
 
       it 'should give a X-Total-Count header' do
         headers_keys = response.headers.keys
@@ -99,6 +115,22 @@ describe NumbersController, :type => :controller do
         expect(headers_keys).not_to include('Per-Page')
         expect(headers_keys).to include('X-Per-Page')
         expect(per_page).to eq(10)
+      end
+
+      it 'should give a X-Current-Page header' do
+        headers_keys = response.headers.keys
+
+        expect(headers_keys).not_to include('Current-Page')
+        expect(headers_keys).to include('X-Current-Page')
+        expect(current_page).to eq(1)
+      end
+
+      it 'should give a X-Total-Pages header' do
+        headers_keys = response.headers.keys
+
+        expect(headers_keys).not_to include('Total-Pages')
+        expect(headers_keys).to include('X-Total-Pages')
+        expect(total_pages).to eq(1)
       end
     end
   end

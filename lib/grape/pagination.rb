@@ -20,12 +20,17 @@ module Grape
             links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
           end
 
-          total_header    = ApiPagination.config.total_header
-          per_page_header = ApiPagination.config.per_page_header
+          total_header        = ApiPagination.config.total_header
+          per_page_header     = ApiPagination.config.per_page_header
+          current_page_header = ApiPagination.config.current_page_header
+          total_pages_header  = ApiPagination.config.total_pages_header
+          total_collection    = ApiPagination.total_from(collection)
 
-          header 'Link',          links.join(', ') unless links.empty?
-          header total_header,    ApiPagination.total_from(collection)
-          header per_page_header, options[:per_page].to_s
+          header 'Link',              links.join(', ') unless links.empty?
+          header total_header,        total_collection
+          header per_page_header,     options[:per_page].to_s
+          header current_page_header, options[:page].to_s
+          header total_pages_header,  (total_collection.to_f / options[:per_page].to_f).ceil.to_s
 
           return collection
         end
