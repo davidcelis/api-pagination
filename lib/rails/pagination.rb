@@ -25,8 +25,8 @@ module Rails
 
     def _paginate_collection(collection, options={})
       options = {
-        :page     => params[:page],
-        :per_page => (options.delete(:per_page) || params[:per_page])
+        page: params[:page].try(:to_i),
+        per_page: (options.delete(:per_page) || params[:per_page].try(:to_i))
       }
       collection = ApiPagination.paginate(collection, options)
 
@@ -35,7 +35,7 @@ module Rails
       pages = ApiPagination.pages_from(collection)
 
       pages.each do |k, v|
-        new_params = request.query_parameters.merge(:page => v)
+        new_params = request.query_parameters.merge(page: v)
         links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
       end
 
