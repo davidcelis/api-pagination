@@ -101,5 +101,19 @@ describe NumbersController, :type => :controller do
         expect(per_page).to eq(10)
       end
     end
+
+    context 'with passed page option' do
+      before { get :index_with_alt_page, :count => 100 }
+
+      it 'should return the correct page' do
+        body = '[11,12,13,14,15,16,17,18,19,20]'
+
+        if defined?(response)
+          expect(response.body).to eq(body)
+        else
+          expect(last_response.body).to eq(body)
+        end
+      end
+    end
   end
 end

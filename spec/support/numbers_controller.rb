@@ -41,6 +41,7 @@ end
 Rails.application.routes.draw do
   resources :numbers, :only => [:index] do
     get :index_with_custom_render, on: :collection
+    get :index_with_alt_page,      on: :collection
   end
 end
 
@@ -75,5 +76,11 @@ class NumbersController < ActionController::Base
     numbers = paginate numbers, :per_page => 10
 
     render json: NumbersSerializer.new(numbers)
+  end
+
+  def index_with_alt_page
+    total = params.fetch(:count).to_i
+
+    paginate :json => (1..total).to_a, :per_page => 10, page: 2
   end
 end
