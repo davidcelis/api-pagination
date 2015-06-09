@@ -99,5 +99,16 @@ describe NumbersAPI do
         expect(per_page).to eq(10)
       end
     end
+
+    context 'with query string including array parameter' do
+      before do
+        get '/numbers', { count: 100, parity: ['odd', 'even']}
+      end
+
+      it 'returns links with with same received parameters' do
+        expect(links).to include('<http://example.org/numbers?count=100&page=10&parity%5B%5D=odd&parity%5B%5D=even>; rel="last"')
+        expect(links).to include('<http://example.org/numbers?count=100&page=2&parity%5B%5D=odd&parity%5B%5D=even>; rel="next"')
+      end
+    end
   end
 end

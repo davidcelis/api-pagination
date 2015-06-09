@@ -15,7 +15,7 @@ module Grape
           pages = ApiPagination.pages_from(collection)
 
           pages.each do |k, v|
-            old_params = Rack::Utils.parse_query(request.query_string)
+            old_params = Rack::Utils.parse_nested_query(request.query_string)
             new_params = old_params.merge('page' => v)
             links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
           end
