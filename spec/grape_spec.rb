@@ -106,8 +106,8 @@ describe NumbersAPI do
       end
 
       it 'returns links with with same received parameters' do
-        expect(links).to include('<http://example.org/numbers?count=100&page=10&state%5B%5D=new&state%5B%5D=active>; rel="last"')
-        expect(links).to include('<http://example.org/numbers?count=100&page=2&state%5B%5D=new&state%5B%5D=active>; rel="next"')
+        expect(links).to include('<http://example.org/numbers?count=100&page=10&parity%5B%5D=odd&parity%5B%5D=even>; rel="last"')
+        expect(links).to include('<http://example.org/numbers?count=100&page=2&parity%5B%5D=odd&parity%5B%5D=even>; rel="next"')
       end
     end
   end
