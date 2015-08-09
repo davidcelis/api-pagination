@@ -10,7 +10,7 @@ module ApiPagination
 
       case ApiPagination.config.paginator
       when :kaminari
-        paginate_with_kaminari(collection, options)
+        paginate_with_kaminari(collection, options, options[:paginate_array_options] || {})
       when :will_paginate
         paginate_with_will_paginate(collection, options)
       else
@@ -56,14 +56,14 @@ module ApiPagination
 
     private
 
-    def paginate_with_kaminari(collection, options)
+    def paginate_with_kaminari(collection, options, paginate_array_options = {})
       if Kaminari.config.max_per_page && options[:per_page] > Kaminari.config.max_per_page
         options[:per_page] = Kaminari.config.max_per_page
       elsif options[:per_page] <= 0
         options[:per_page] = Kaminari.config.default_per_page
       end
 
-      collection = Kaminari.paginate_array(collection) if collection.is_a?(Array)
+      collection = Kaminari.paginate_array(collection, paginate_array_options) if collection.is_a?(Array)
       collection.page(options[:page]).per(options[:per_page])
     end
 
