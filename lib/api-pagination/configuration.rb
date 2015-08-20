@@ -4,6 +4,8 @@ module ApiPagination
 
     attr_accessor :per_page_header
 
+    attr_accessor :page_header
+
     def configure(&block)
       yield self
     end
@@ -11,6 +13,7 @@ module ApiPagination
     def initialize
       @total_header    = 'Total'
       @per_page_header = 'Per-Page'
+      @page_header     = nil
     end
 
     def paginator
