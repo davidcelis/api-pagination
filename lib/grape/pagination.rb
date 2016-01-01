@@ -22,10 +22,12 @@ module Grape
 
           total_header    = ApiPagination.config.total_header
           per_page_header = ApiPagination.config.per_page_header
+          page_header     = ApiPagination.config.page_header
 
           header 'Link',          links.join(', ') unless links.empty?
           header total_header,    ApiPagination.total_from(collection)
           header per_page_header, options[:per_page].to_s
+          header page_header,     options[:page].to_s unless page_header.nil?
 
           return collection
         end

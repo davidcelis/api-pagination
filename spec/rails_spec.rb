@@ -73,6 +73,7 @@ describe NumbersController, :type => :controller do
       before do
         ApiPagination.config.total_header    = 'X-Total-Count'
         ApiPagination.config.per_page_header = 'X-Per-Page'
+        ApiPagination.config.page_header     = 'X-Page'
 
         get :index, count: 10
       end
@@ -80,10 +81,12 @@ describe NumbersController, :type => :controller do
       after do
         ApiPagination.config.total_header    = 'Total'
         ApiPagination.config.per_page_header = 'Per-Page'
+        ApiPagination.config.page_header     = nil
       end
 
       let(:total) { response.header['X-Total-Count'].to_i }
       let(:per_page) { response.header['X-Per-Page'].to_i }
+      let(:page) { response.header['X-Page'].to_i }
 
       it 'should give a X-Total-Count header' do
         headers_keys = response.headers.keys
@@ -99,6 +102,13 @@ describe NumbersController, :type => :controller do
         expect(headers_keys).not_to include('Per-Page')
         expect(headers_keys).to include('X-Per-Page')
         expect(per_page).to eq(10)
+      end
+
+      it 'should give a X-Page header' do
+        headers_keys = response.headers.keys
+
+        expect(headers_keys).to include('X-Page')
+        expect(page).to eq(1)
       end
     end
   end
