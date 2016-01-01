@@ -45,12 +45,12 @@ module ApiPagination
     end
 
     def per_page_header
-      warn "[DEPRECATION] ApiPagination.paginator is deprecated. Please use ApiPagination.config.per_page_header"
+      warn "[DEPRECATION] ApiPagination.per_page_header is deprecated. Please use ApiPagination.config.per_page_header"
       config.per_page_header
     end
 
     def total_header
-      warn "[DEPRECATION] ApiPagination.paginator is deprecated. Please use ApiPagination.config.total_header"
+      warn "[DEPRECATION] ApiPagination.total_header is deprecated. Please use ApiPagination.config.total_header"
       config.total_header
     end
 

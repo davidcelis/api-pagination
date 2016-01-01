@@ -111,5 +111,17 @@ describe NumbersController, :type => :controller do
         expect(page).to eq(1)
       end
     end
+
+    context 'configured not to include the total' do
+      before { ApiPagination.config.include_total = false }
+
+      it 'should not include a Total header' do
+        get :index, count: 10
+
+        expect(response.header['Total']).to be_nil
+      end
+
+      after { ApiPagination.config.include_total = true }
+    end
   end
 end

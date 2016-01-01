@@ -110,6 +110,18 @@ describe NumbersAPI do
       end
     end
 
+    context 'configured not to include the total' do
+      before { ApiPagination.config.include_total = false }
+
+      it 'should not include a Total header' do
+        get '/numbers', count: 10
+
+        expect(last_response.header['Total']).to be_nil
+      end
+
+      after { ApiPagination.config.include_total = true }
+    end
+
     context 'with query string including array parameter' do
       before do
         get '/numbers', { count: 100, parity: ['odd', 'even']}
