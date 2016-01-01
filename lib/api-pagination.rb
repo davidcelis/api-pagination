@@ -63,7 +63,7 @@ module ApiPagination
         options[:per_page] = Kaminari.config.default_per_page
       end
 
-      collection = Kaminari.paginate_array(collection, paginate_array_options) if collection.is_a?(Array)
+      collection = Kaminari.paginate_array(collection, paginate_array_options) if collection.is_a?(Array) || paginate_array_options[:total_count].present?
       collection.page(options[:page]).per(options[:per_page])
     end
 
