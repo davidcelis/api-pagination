@@ -45,7 +45,7 @@ module ApiPagination
       if Kaminari.config.max_per_page && options[:per_page] > Kaminari.config.max_per_page
         options[:per_page] = Kaminari.config.max_per_page
       elsif options[:per_page] <= 0
-        options[:per_page] = Kaminari.config.default_per_page
+        options[:per_page] = get_default_per_page_for_kaminari(collection)
       end
 
       collection = Kaminari.paginate_array(collection, paginate_array_options) if collection.is_a?(Array)
@@ -53,13 +53,33 @@ module ApiPagination
     end
 
     def paginate_with_will_paginate(collection, options)
-      options[:per_page] = WillPaginate.per_page if options[:per_page] <= 0
+      if options[:per_page] <= 0
+        options[:per_page] = default_per_page_for_will_paginate(collection)
+      end
 
       if defined?(Sequel::Dataset) && collection.kind_of?(Sequel::Dataset)
         collection.paginate(options[:page], options[:per_page])
       else
         collection.paginate(:page => options[:page], :per_page => options[:per_page])
       end
+    end
+
+    def get_default_per_page_for_kaminari(collection)
+      default = Kaminari.config.default_per_page
+      detect_model(collection).default_per_page || default
+    rescue
+      default
+    end
+
+    def default_per_page_for_will_paginate(collection)
+      default = WillPaginate.per_page
+      detect_model(collection).per_page || default
+    rescue
+      default
+    end
+
+    def detect_model(collection)
+      collection.first.class
     end
   end
 end

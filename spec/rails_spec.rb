@@ -200,5 +200,47 @@ describe NumbersController, :type => :controller do
         end
       end
     end
+
+    context 'default per page in model' do
+      before do
+        class Fixnum
+          @default_per_page = 6
+          @per_page = 6
+
+          class << self
+            attr_accessor :default_per_page, :per_page
+          end
+        end
+      end
+
+      after do
+        class Fixnum
+          @default_per_page = 25
+          @per_page = 25
+        end
+      end
+
+      it 'should use default per page from model' do
+        get :index_with_no_per_page, count: 100
+
+        expect(response.header['Per-Page']).to eq('6')
+      end
+
+      it 'should not fail if model does not respond to per page' do
+        class Fixnum
+          @default_per_page = nil
+          @per_page = nil
+        end
+
+        get :index_with_no_per_page, count: 100
+
+        expect(response.header['Per-Page']).to eq(
+          case ApiPagination.config.paginator
+          when :kaminari      then Kaminari.config.default_per_page.to_s
+          when :will_paginate then WillPaginate.per_page.to_s
+          end
+        )
+      end
+    end
   end
 end
