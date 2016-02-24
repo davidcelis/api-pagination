@@ -40,8 +40,22 @@ ApiPagination.configure do |config|
   # By default, this is set to 'Per-Page'
   config.per_page_header = 'X-Per-Page'
 
-  # Optional : set this to add a header with the current page number.
+  # Optional: set this to add a header with the current page number.
   config.page_header = 'X-Page'
+
+  # Optional: what parameter should be used to set the page option
+  config.page_param = :page
+  # or
+  config.page_param do |params|
+    params[:page][:number]
+  end
+
+  # Optional: what parameter should be used to set the per page option
+  config.per_page_param = :per_page
+  # or
+  config.per_page_param do |params|
+    params[:page][:size]
+  end
 end
 ```
 

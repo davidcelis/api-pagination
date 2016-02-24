@@ -19,6 +19,33 @@ module ApiPagination
       @include_total   = true
     end
 
+    ['page', 'per_page'].each do |param_name|
+      method_name = "#{param_name}_param"
+      instance_variable_name = "@#{method_name}"
+
+      define_method method_name do |params = nil, &block|
+        if block.is_a?(Proc)
+          instance_variable_set(instance_variable_name, block)
+          return
+        end
+
+        if instance_variable_get(instance_variable_name).nil?
+          # use :page & :per_page by default
+          instance_variable_set(instance_variable_name, (lambda { |p| p[param_name.to_sym] }))
+        end
+
+        instance_variable_get(instance_variable_name).call(params)
+      end
+
+      define_method "#{method_name}=" do |param|
+        if param.is_a?(Symbol) || param.is_a?(String)
+          instance_variable_set(instance_variable_name, (lambda { |params| params[param] }))
+        else
+          raise ArgumentError, "Cannot set page_param option"
+        end
+      end
+    end
+
     def paginator
       @paginator || set_paginator
     end

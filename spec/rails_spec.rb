@@ -123,5 +123,82 @@ describe NumbersController, :type => :controller do
 
       after { ApiPagination.config.include_total = true }
     end
+
+    context 'custom page param' do
+      context 'page_param as a symbol' do
+        before do
+          ApiPagination.config.page_param = :foo
+          ApiPagination.config.page_header = 'Page'
+        end
+
+        after do
+          ApiPagination.config.page_param = :page
+          ApiPagination.config.page_header = nil
+        end
+
+        it 'should work' do
+          get :index, :foo => 2, :count => 100
+
+          expect(response.header['Page']).to eq('2')
+        end
+      end
+
+      context 'page_param as a block' do
+        before do
+          ApiPagination.config.page_param do |params|
+            params[:foo][:bar]
+          end
+
+          ApiPagination.config.page_header = 'Page'
+        end
+
+        after do
+          ApiPagination.config.page_param = :page
+          ApiPagination.config.page_header = nil
+        end
+
+        it 'should work' do
+          get :index, :foo => { :bar => 2 }, :count => 100
+
+          expect(response.header['Page']).to eq('2')
+        end
+      end
+    end
+
+    context 'custom per_page param' do
+      context 'per_page_param as a symbol' do
+        before do
+          ApiPagination.config.per_page_param = :foo
+        end
+
+        after do
+          ApiPagination.config.per_page_param = :per_page
+        end
+
+        it 'should work' do
+          get :index_with_no_per_page, :foo => 2, :count => 100
+
+          expect(response.header['Per-Page']).to eq('2')
+        end
+      end
+
+      context 'page_param as a block' do
+        before do
+          ApiPagination.config.per_page_param do |params|
+            params[:foo][:bar]
+          end
+        end
+
+        after do
+          ApiPagination.config.per_page_param = :per_page
+        end
+
+        it 'should work' do
+          get :index_with_no_per_page, :foo => { :bar => 2 }, :count => 100
+
+          expect(response.header['Per-Page']).to eq('2')
+        end
+      end
+    end
   end
 end

@@ -25,8 +25,11 @@ module Rails
 
     def _paginate_collection(collection, options={})
       options = {
-        :page     => params[:page],
-        :per_page => (options.delete(:per_page) || params[:per_page])
+        :page     => ApiPagination.config.page_param(params),
+        :per_page => (
+          options.delete(:per_page) ||
+          ApiPagination.config.per_page_param(params)
+        )
       }
       collection = ApiPagination.paginate(collection, options)
 

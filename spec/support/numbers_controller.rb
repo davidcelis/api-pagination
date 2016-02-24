@@ -41,6 +41,7 @@ end
 Rails.application.routes.draw do
   resources :numbers, :only => [:index] do
     get :index_with_custom_render, on: :collection
+    get :index_with_no_per_page,   on: :collection
   end
 end
 
@@ -73,6 +74,14 @@ class NumbersController < ActionController::Base
     total   = params.fetch(:count).to_i
     numbers = (1..total).to_a
     numbers = paginate numbers, :per_page => 10
+
+    render json: NumbersSerializer.new(numbers)
+  end
+
+  def index_with_no_per_page
+    total   = params.fetch(:count).to_i
+    numbers = (1..total).to_a
+    numbers = paginate numbers
 
     render json: NumbersSerializer.new(numbers)
   end
