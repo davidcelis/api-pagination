@@ -12,7 +12,7 @@ In your `Gemfile`:
 ```ruby
 # Requires Rails (Rails-API is also supported), or Grape
 # v0.10.0 or later. If you're on an earlier version of
-# Grape, use api-pagination 3.x
+# Grape, use api-pagination v3.0.2.
 gem 'rails', '>= 3.0.0'
 gem 'rails-api'
 gem 'grape', '>= 0.10.0'
