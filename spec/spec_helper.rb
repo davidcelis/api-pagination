@@ -2,14 +2,13 @@ require 'support/numbers_controller'
 require 'support/numbers_api'
 require 'api-pagination'
 
-if ENV['PAGINATOR']
-  require ENV['PAGINATOR']
-  ApiPagination.config.paginator = ENV['PAGINATOR'].to_sym
-else
+if ENV['PAGINATOR'].nil?
   warn 'No PAGINATOR set. Defaulting to kaminari. To test against will_paginate, run `PAGINATOR=will_paginate bundle exec rspec`'
-  require 'kaminari'
-  ApiPagination.config.paginator = :kaminari
+  ENV['PAGINATOR'] = 'kaminari'
 end
+
+require ENV['PAGINATOR']
+ApiPagination.config.paginator = ENV['PAGINATOR'].to_sym
 
 require 'will_paginate/array'
 
