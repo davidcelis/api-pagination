@@ -24,13 +24,9 @@ module Rails
     private
 
     def _paginate_collection(collection, options={})
-      options = {
-        :page     => ApiPagination.config.page_param(params),
-        :per_page => (
-          options.delete(:per_page) ||
-          ApiPagination.config.per_page_param(params)
-        )
-      }
+      options[:page] = ApiPagination.config.page_param(params)
+      options[:per_page] ||= ApiPagination.config.per_page_param(params)
+
       collection = ApiPagination.paginate(collection, options)
 
       links = (headers['Link'] || "").split(',').map(&:strip)
@@ -47,12 +43,20 @@ module Rails
       page_header     = ApiPagination.config.page_header
       include_total   = ApiPagination.config.include_total
 
-      headers['Link']          = links.join(', ') unless links.empty?
-      headers[total_header]    = ApiPagination.total_from(collection) if include_total
+      headers['Link'] = links.join(', ') unless links.empty?
       headers[per_page_header] = options[:per_page].to_s
-      headers[page_header]     = options[:page].to_s unless page_header.nil?
+      headers[page_header] = options[:page].to_s unless page_header.nil?
+      headers[total_header] = total_count(collection, options) if include_total
 
       return collection
+    end
+
+    def total_count(collection, options)
+      total_count = if ApiPagination.config.paginator == :kaminari
+        paginate_array_options = options[:paginate_array_options]
+        paginate_array_options[:total_count] if paginate_array_options
+      end
+      total_count || ApiPagination.total_from(collection)
     end
   end
 end

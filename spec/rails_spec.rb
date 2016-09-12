@@ -201,6 +201,52 @@ describe NumbersController, :type => :controller do
       end
     end
 
+    context 'paginate array options' do
+      shared_examples 'properly set Total header' do
+        let(:params) do
+          {
+            paginate_array_total_count: paginate_array_total_count,
+            count: count,
+          }
+        end
+
+        specify do
+          get :index_with_paginate_array_options, params
+          expect(response.header['Total'].to_i).to eq total_header
+        end
+      end
+
+      context 'kaminari' do
+        around do |example|
+          paginator = ApiPagination.config.paginator
+          ApiPagination.config.paginator = :kaminari
+          example.run
+          ApiPagination.config.paginator = paginator
+        end
+
+        it_should_behave_like 'properly set Total header' do
+          let(:paginate_array_total_count) { 300 }
+          let(:total_header) { 300 }
+          let(:count) { 50 }
+        end
+      end
+
+      context 'will_paginate' do
+        around do |example|
+          paginator = ApiPagination.config.paginator
+          ApiPagination.config.paginator = :will_paginate
+          example.run
+          ApiPagination.config.paginator = paginator
+        end
+
+        it_should_behave_like 'properly set Total header' do
+          let(:paginate_array_total_count) { 300 }
+          let(:total_header) { 50 }
+          let(:count) { 50 }
+        end
+      end
+    end
+
     context 'default per page in model' do
       before do
         class Fixnum
