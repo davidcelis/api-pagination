@@ -1,4 +1,5 @@
 require 'action_controller'
+require 'api-pagination/hooks'
 require 'ostruct'
 
 module Rails
@@ -58,7 +59,7 @@ class NumbersSerializer
   end
 end
 
-class NumbersController < ActionController::Base
+class NumbersController < ApiPagination::Hooks.rails_parent_controller
   include Rails.application.routes.url_helpers
 
   def index
