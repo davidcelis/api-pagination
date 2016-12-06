@@ -105,6 +105,14 @@ end
 
 Note that the collection sent to `paginate` _must_ respond to your paginator's methods. This is typically fine unless you're dealing with a stock Array. For Kaminari, `Kaminari.paginate_array` will be called for you behind-the-scenes. For WillPaginate, you're out of luck unless you call `require 'will_paginate/array'` somewhere. Because this pollutes `Array`, it won't be done for you automatically.
 
+**NOTE:** In versions 4.4.0 and below, the `Rails::Pagination` module would end up included in `ActionController::Base` even if `ActionController::API` was defined. As of version 4.5.0, this is no longer the case. If for any reason your API controllers cannot easily changed be changed to inherit from `ActionController::API` instead, you can manually include the module:
+
+```ruby
+class API::ApplicationController < ActionController::Base
+  include Rails::Pagination
+end
+```
+
 ## Grape
 
 With Grape, `paginate` is used to declare that your endpoint takes a `:page` and `:per_page` param. You can also directly specify a `:max_per_page` that users aren't allowed to go over. Then, inside your API endpoint, it simply takes your collection:
