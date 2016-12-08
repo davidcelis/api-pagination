@@ -1,6 +1,19 @@
 begin; require 'rails'; rescue LoadError; end
 begin; require 'rails-api'; rescue LoadError; end
+
 if defined?(Rails)
+  module ApiPagination
+    module Hooks
+      def self.rails_parent_controller
+        if Gem::Version.new(Rails.version) >= Gem::Version.new('5') || defined?(ActionController::API)
+          ActionController::API
+        else
+          ActionController::Base
+        end
+      end
+    end
+  end
+
   require 'rails/pagination'
 
   ActiveSupport.on_load(:action_controller) do
@@ -27,14 +40,3 @@ unless defined?(Kaminari) || defined?(WillPaginate::CollectionMethods)
   WARNING
 end
 
-module ApiPagination
-  module Hooks
-    def self.rails_parent_controller
-      if Gem::Version.new(Rails.version) >= Gem::Version.new('5') || defined?(ActionController::API)
-        ActionController::API
-      else
-        ActionController::Base
-      end
-    end
-  end
-end
