@@ -212,6 +212,8 @@ describe NumbersController, :type => :controller do
 
         specify do
           get :index_with_paginate_array_options, params: params
+
+          expect(response.header['Total']).to be_kind_of(String)
           expect(response.header['Total'].to_i).to eq total_header
         end
       end
