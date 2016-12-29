@@ -46,7 +46,7 @@ module Rails
       headers['Link'] = links.join(', ') unless links.empty?
       headers[per_page_header] = options[:per_page].to_s
       headers[page_header] = options[:page].to_s unless page_header.nil?
-      headers[total_header] = total_count(collection, options) if include_total
+      headers[total_header] = total_count(collection, options).to_s if include_total
 
       return collection
     end
