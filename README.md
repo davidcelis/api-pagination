@@ -83,7 +83,7 @@ class MoviesController < ApplicationController
 end
 ```
 
-This will pull your collection from the `json` or `xml` option, paginate it for you using `params[:page]` and `params[:per_page]`, render Link headers, and call `ActionController::Base#render` with whatever you passed to `paginate`. This should work well with [ActiveModel::Serializers](https://github.com/rails-api/active_model-serializers). However, if you need more control over what is done with your paginated collection, you can pass the collection directly to `paginate` to receive a paginated collection and have your headers set. Then, you can pass that paginated collection to a serializer or do whatever you want with it:
+This will pull your collection from the `json` or `xml` option, paginate it for you using `params[:page]` and `params[:per_page]`, render Link headers, and call `ActionController::Base#render` with whatever you passed to `paginate`. This should work well with [ActiveModel::Serializers](https://github.com/rails-api/active_model_serializers). However, if you need more control over what is done with your paginated collection, you can pass the collection directly to `paginate` to receive a paginated collection and have your headers set. Then, you can pass that paginated collection to a serializer or do whatever you want with it:
 
 ```ruby
 class MoviesController < ApplicationController
