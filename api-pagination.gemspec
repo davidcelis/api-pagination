@@ -20,5 +20,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'grape', '>= 0.10.0'
   s.add_development_dependency 'railties', '>= 3.0.0'
   s.add_development_dependency 'actionpack', '>= 3.0.0'
+  s.add_development_dependency 'activerecord', '>= 3.0.0'
   s.add_development_dependency 'sequel', '>= 4.9.0'
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'database_cleaner'
 end

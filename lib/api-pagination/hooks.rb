@@ -19,6 +19,11 @@ if defined?(Rails)
   ActiveSupport.on_load(:action_controller) do
     ApiPagination::Hooks.rails_parent_controller.send(:include, Rails::Pagination)
   end
+
+  ActiveSupport.on_load(:active_record) do
+    require_relative '../cursor/active_record_extension'
+    ::ActiveRecord::Base.send :include, Cursor::ActiveRecordExtension
+  end
 end
 
 begin; require 'grape'; rescue LoadError; end

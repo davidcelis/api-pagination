@@ -4,7 +4,7 @@ require 'support/shared_examples/first_page'
 require 'support/shared_examples/middle_page'
 require 'support/shared_examples/last_page'
 
-describe NumbersController, :type => :controller do
+describe NumbersController, :type => :controller, skip: testing_cursor? do
   before { request.host = 'example.org' }
 
   describe 'GET #index' do

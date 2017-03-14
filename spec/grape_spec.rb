@@ -4,7 +4,7 @@ require 'support/shared_examples/first_page'
 require 'support/shared_examples/middle_page'
 require 'support/shared_examples/last_page'
 
-describe NumbersAPI do
+describe NumbersAPI, skip: testing_cursor? do
   describe 'GET #index' do
     let(:links) { last_response.headers['Link'].split(', ') }
     let(:total) { last_response.headers['Total'].to_i }

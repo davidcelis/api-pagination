@@ -113,6 +113,32 @@ class API::ApplicationController < ActionController::Base
 end
 ```
 
+### Cursor based pagination
+
+In brief, it's really great in case of API when your entities create/destroy frequently.
+For more information about subject please follow
+[https://www.sitepoint.com/paginating-real-time-data-cursor-based-pagination](https://www.sitepoint.com/paginating-real-time-data-cursor-based-pagination)
+
+Current implementation based on Kaminari and compatible with it model scoped config options.
+You can use it independently of Kaminari or WillPaginate.
+
+Just use `cursor_paginate` method instead of `pagination`:
+
+      def cast
+        actors = Movie.find(params[:id]).actors
+        cursor_paginate json: actors, per_page: 10
+      end
+
+You can configure the following default values by overriding these values using `Cursor.configure` method.
+
+    default_per_page  # 25 by default
+    max_per_page      # nil by default
+
+Btw you can use cursor pagination as standalone feature:
+
+    movies = Movie.cursor_page(after: 10).per(10) # Get 10 movies where id > 10
+    movies = Movie.cursor_page(before: 51).per(10) # Get 10 moview where id < 51
+
 ## Grape
 
 With Grape, `paginate` is used to declare that your endpoint takes a `:page` and `:per_page` param. You can also directly specify a `:max_per_page` that users aren't allowed to go over. Then, inside your API endpoint, it simply takes your collection:
@@ -157,6 +183,18 @@ Total: 4321
 Per-Page: 10
 # ...
 ```
+
+And example for cursor based pagination:
+
+```bash
+$ curl --include 'https://localhost:3000/movies?after=60'
+HTTP/1.1 200 OK
+Link: <http://localhost:3000/movies?after=70>; rel="next",
+  <http://localhost:3000/movies?before=61>; rel="prev"
+Total: 100
+Per-Page: 10
+```
+
 
 ## A Note on Kaminari and WillPaginate
 
