@@ -26,5 +26,15 @@ describe ApiPagination do
         }
       )
     end
+
+    describe '.pages_from' do
+      subject { described_class.pages_from collection }
+
+      context 'on empty collection' do
+        let(:collection) { ApiPagination.paginate [], page: 1 }
+
+        it { is_expected.to be_empty }
+      end
+    end
   end
 end
