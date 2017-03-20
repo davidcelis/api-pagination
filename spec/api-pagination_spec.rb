@@ -10,7 +10,7 @@ describe ApiPagination do
     end
 
     after do
-      ApiPagination.config.paginator = ENV['PAGINATOR'].to_sym
+      ApiPagination.config.paginator = ENV.fetch('PAGINATOR', 'kaminari').to_sym
     end
 
     it 'should accept paginate_array_options option' do
