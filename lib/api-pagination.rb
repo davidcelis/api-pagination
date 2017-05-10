@@ -60,7 +60,7 @@ module ApiPagination
       if defined?(Sequel::Dataset) && collection.kind_of?(Sequel::Dataset)
         collection.paginate(options[:page], options[:per_page])
       else
-        collection.paginate(:page => options[:page], :per_page => options[:per_page])
+        collection.paginate(options)
       end
     end
 
