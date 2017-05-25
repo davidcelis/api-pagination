@@ -82,7 +82,7 @@ module ApiPagination
 
     def detect_model(collection)
       if collection.respond_to?(:table_name)
-        collection.table_name.singularize.capitalize.constantize
+        collection.table_name.classify.constantize
       else
         collection.first.class
       end
