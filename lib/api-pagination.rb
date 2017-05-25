@@ -81,7 +81,11 @@ module ApiPagination
     end
 
     def detect_model(collection)
-      collection.first.class
+      if collection.respond_to?(:table_name)
+        collection.table_name.singularize.capitalize.constantize
+      else
+        collection.first.class
+      end
     end
   end
 end
