@@ -84,7 +84,7 @@ class NumbersController < ApiPagination::Hooks.rails_parent_controller
 
   def index_with_no_per_page
     total   = params.fetch(:count).to_i
-    numbers = (1..total).to_a
+    numbers = (0...total).to_a
     numbers = paginate numbers
 
     render json: NumbersSerializer.new(numbers)
@@ -93,7 +93,7 @@ class NumbersController < ApiPagination::Hooks.rails_parent_controller
   def index_with_paginate_array_options
     count = params.fetch(:count).to_i
     total_count = params.fetch(:paginate_array_total_count).to_i
-    numbers = (1..count).to_a
+    numbers = (0...count).to_a
     numbers = paginate numbers, paginate_array_options: {total_count: total_count}
 
     render json: NumbersSerializer.new(numbers)

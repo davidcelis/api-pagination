@@ -11,7 +11,7 @@ shared_examples 'an endpoint with a middle page' do
   end
 
   it 'should list a middle page of numbers in the response body' do
-    body = '[11,12,13,14,15,16,17,18,19,20]'
+    body = '[10,11,12,13,14,15,16,17,18,19]'
 
     if defined?(response)
       expect(response.body).to eq(body)
