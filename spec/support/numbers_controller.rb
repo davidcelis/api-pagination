@@ -76,7 +76,7 @@ class NumbersController < ApiPagination::Hooks.rails_parent_controller
 
   def index_with_custom_render
     total   = params.fetch(:count).to_i
-    numbers = (1..total).to_a
+    numbers = (0...total).to_a
     numbers = paginate numbers, :per_page => 10
 
     render json: NumbersSerializer.new(numbers)
