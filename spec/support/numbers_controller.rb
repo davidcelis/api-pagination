@@ -71,7 +71,7 @@ class NumbersController < ApiPagination::Hooks.rails_parent_controller
       headers['Link'] = %(<#{numbers_url}?#{query.to_param}>; rel="without")
     end
 
-    paginate :json => (1..total).to_a, :per_page => 10
+    paginate :json => (0...total).to_a, :per_page => 10
   end
 
   def index_with_custom_render
