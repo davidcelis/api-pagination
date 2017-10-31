@@ -10,6 +10,27 @@ describe NumbersAPI do
     let(:total) { last_response.headers['Total'].to_i }
     let(:per_page) { last_response.headers['Per-Page'].to_i }
 
+    context 'with empty collection' do
+      before { get '/numbers', :count => 0 }
+
+      it 'should not paginate' do
+        expect(last_response.headers.keys).not_to include('Link')
+      end
+
+      it 'should give a Total header' do
+        expect(total).to eq(0)
+      end
+
+      it 'should give a Per-Page header' do
+        expect(per_page).to eq(10)
+      end
+
+      it 'should list all numbers in the response body' do
+        body = '[]'
+        expect(last_response.body).to eq(body)
+      end
+    end
+
     context 'without enough items to give more than one page' do
       before { get '/numbers', :count => 10 }
 
@@ -26,7 +47,7 @@ describe NumbersAPI do
       end
 
       it 'should list all numbers in the response body' do
-        body = '[1,2,3,4,5,6,7,8,9,10]'
+        body = '[0,1,2,3,4,5,6,7,8,9]'
         expect(last_response.body).to eq(body)
       end
     end
@@ -60,7 +81,7 @@ describe NumbersAPI do
         before { get '/numbers', :count => 100, :per_page => 30 }
 
         it 'should not go above the max_per_page_limit' do
-          body = '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]'
+          body = '[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]'
 
           expect(last_response.body).to eq(body)
         end

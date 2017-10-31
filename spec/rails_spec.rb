@@ -12,6 +12,27 @@ describe NumbersController, :type => :controller do
     let(:total) { response.headers['Total'].to_i }
     let(:per_page) { response.headers['Per-Page'].to_i }
 
+    context 'with empty collection' do
+      before { get :index, params: {count: 0} }
+
+      it 'should not paginate' do
+        expect(response.headers.keys).not_to include('Link')
+      end
+
+      it 'should give a Total header' do
+        expect(total).to eq(0)
+      end
+
+      it 'should give a Per-Page header' do
+        expect(per_page).to eq(10)
+      end
+
+      it 'should return an empty array' do
+        body = '[]'
+        expect(response.body).to eq(body)
+      end
+    end
+
     context 'without enough items to give more than one page' do
       before { get :index, params: {count: 10} }
 
@@ -28,7 +49,7 @@ describe NumbersController, :type => :controller do
       end
 
       it 'should list all numbers in the response body' do
-        body = '[1,2,3,4,5,6,7,8,9,10]'
+        body = '[0,1,2,3,4,5,6,7,8,9]'
         expect(response.body).to eq(body)
       end
     end
@@ -63,7 +84,7 @@ describe NumbersController, :type => :controller do
       it 'yields to the block instead of implicitly rendering' do
         get :index_with_custom_render, params: {count: 100}
 
-        json = { numbers: (1..10).map { |n| { number: n } } }.to_json
+        json = { numbers: (0...10).map { |n| { number: n } } }.to_json
 
         expect(response.body).to eq(json)
       end

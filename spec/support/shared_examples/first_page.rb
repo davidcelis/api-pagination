@@ -20,7 +20,7 @@ shared_examples 'an endpoint with a first page' do
   end
 
   it 'should list the first page of numbers in the response body' do
-    body = '[1,2,3,4,5,6,7,8,9,10]'
+    body = '[0,1,2,3,4,5,6,7,8,9]'
     if defined?(response)
       expect(response.body).to eq(body)
     else
