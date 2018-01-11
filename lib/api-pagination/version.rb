@@ -1,8 +1,8 @@
 module ApiPagination
   class Version
     MAJOR = 4
-    MINOR = 6
-    PATCH = 3
+    MINOR = 7
+    PATCH = 0
 
     def self.to_s
       [MAJOR, MINOR, PATCH].join('.')
