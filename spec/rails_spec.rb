@@ -74,19 +74,23 @@ describe NumbersController, :type => :controller do
         ApiPagination.config.total_header    = 'X-Total-Count'
         ApiPagination.config.per_page_header = 'X-Per-Page'
         ApiPagination.config.page_header     = 'X-Page'
+        ApiPagination.config.base_url        = 'http://guybrush:3000'
 
-        get :index, params: {count: 10}
+        get :index, params: params
       end
 
       after do
         ApiPagination.config.total_header    = 'Total'
         ApiPagination.config.per_page_header = 'Per-Page'
         ApiPagination.config.page_header     = nil
+        ApiPagination.config.base_url        = nil
       end
 
+      let(:params) { { count: 10 } }
       let(:total) { response.header['X-Total-Count'].to_i }
       let(:per_page) { response.header['X-Per-Page'].to_i }
       let(:page) { response.header['X-Page'].to_i }
+      let(:link) { response.header['Link'] }
 
       it 'should give a X-Total-Count header' do
         headers_keys = response.headers.keys
@@ -109,6 +113,15 @@ describe NumbersController, :type => :controller do
 
         expect(headers_keys).to include('X-Page')
         expect(page).to eq(1)
+      end
+
+      context 'with paginated result' do
+        let(:params) { { count: 20 } }
+        it 'should use custom base_url in the Link header' do
+
+          expect(response.headers['Link']).to eq(
+            '<http://guybrush:3000/numbers?count=20&page=2>; rel="last", <http://guybrush:3000/numbers?count=20&page=2>; rel="next"')
+        end
       end
     end
 

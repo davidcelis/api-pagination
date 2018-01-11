@@ -29,8 +29,8 @@ module Rails
 
       collection = ApiPagination.paginate(collection, options)
 
-      links = (headers['Link'] || "").split(',').map(&:strip)
-      url   = request.original_url.sub(/\?.*$/, '')
+      links = (headers['Link'] || '').split(',').map(&:strip)
+      url   = base_url + request.original_fullpath.sub(/\?.*$/, '')
       pages = ApiPagination.pages_from(collection)
 
       pages.each do |k, v|
@@ -58,5 +58,10 @@ module Rails
       end
       total_count || ApiPagination.total_from(collection)
     end
+
+    def base_url
+      ApiPagination.config.base_url || request.base_url
+    end
+
   end
 end
