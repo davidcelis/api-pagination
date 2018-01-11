@@ -30,7 +30,7 @@ module Rails
       collection = ApiPagination.paginate(collection, options)
 
       links = (headers['Link'] || '').split(',').map(&:strip)
-      url   = base_url + request.original_fullpath.sub(/\?.*$/, '')
+      url   = base_url + request.path_info
       pages = ApiPagination.pages_from(collection)
 
       pages.each do |k, v|
