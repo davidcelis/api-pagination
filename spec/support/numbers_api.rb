@@ -5,7 +5,7 @@ class NumbersAPI < Grape::API
   format :json
 
   desc 'Return some paginated set of numbers'
-  paginate :per_page => 10, :max_per_page => 25 
+  paginate :per_page => 10
   params do
     requires :count, :type => Integer
     optional :with_headers, :default => false, :type => Boolean
@@ -18,6 +18,24 @@ class NumbersAPI < Grape::API
       header 'Link', %(<#{url}?#{query.to_query}>; rel="without")
     end
 
+    paginate (1..params[:count]).to_a
+  end
+
+  desc 'Return some paginated set of numbers with max_per_page'
+  paginate :per_page => 10, :max_per_page => 25
+  params do
+    requires :count, :type => Integer
+  end
+  get :numbers_with_max_per_page  do
+    paginate (1..params[:count]).to_a
+  end
+
+  desc 'Return some paginated set of numbers with max_per_page enforced'
+  paginate :per_page => 10, :max_per_page => 25, :enforce_max_per_page => true
+  params do
+    requires :count, :type => Integer
+  end
+  get :numbers_with_enforced_max_per_page  do
     paginate (1..params[:count]).to_a
   end
 end

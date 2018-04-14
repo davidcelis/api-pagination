@@ -138,6 +138,15 @@ class MoviesAPI < Grape::API
     get :cast do
       paginate Movie.find(params[:id]).actors
     end
+
+    desc "Return one movie's awards, paginated"
+    # Enforce max_per_page value will add the alowed values
+    # to the swagger docs, and cause grape to return an error
+    # if outside that range
+    paginate per_page: 10, max_per_page: 200, enforce_max_per_page: true
+    get :awards do
+      paginate Movie.find(params[:id]).awards
+    end
   end
 end
 ```

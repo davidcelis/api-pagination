@@ -39,11 +39,16 @@ module Grape
         def self.paginate(options = {})
           route_setting :per_page, options[:per_page]
           route_setting :max_per_page, options[:max_per_page]
+
+          enforce_max_per_page = options[:max_per_page] && options[:enforce_max_per_page]
+          per_page_values = enforce_max_per_page ? 0..options[:max_per_page] : nil
+
           params do
-            optional :page,     :type => Integer, :default => 1,
-                                :desc => 'Page of results to fetch.'
-            optional :per_page, :type => Integer,
-                                :desc => 'Number of results to return per page.'
+            optional :page,     :type   => Integer, :default => 1,
+                                :desc   => 'Page of results to fetch.'
+            optional :per_page, :type   => Integer,
+                                :desc   => 'Number of results to return per page.',
+                                :values => per_page_values
           end
         end
       end
