@@ -56,11 +56,31 @@ describe NumbersAPI do
         it_behaves_like 'an endpoint with a middle page'
       end
 
-      context 'with a max_per_page setting' do
+      context 'without a max_per_page setting' do
         before { get '/numbers', :count => 100, :per_page => 30 }
+
+        it 'should list all numbers within per page in the response body' do
+          body = '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]'
+
+          expect(last_response.body).to eq(body)
+        end
+      end
+
+      context 'with a max_per_page setting not enforced' do
+        before { get '/numbers_with_max_per_page', :count => 100, :per_page => 30 }
 
         it 'should not go above the max_per_page_limit' do
           body = '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]'
+
+          expect(last_response.body).to eq(body)
+        end
+      end
+
+      context 'with a max_per_page setting enforced' do
+        before { get '/numbers_with_enforced_max_per_page', :count => 100, :per_page => 30 }
+
+        it 'should not allow value above the max_per_page_limit' do
+          body = '{"error":"per_page does not have a valid value"}'
 
           expect(last_response.body).to eq(body)
         end
