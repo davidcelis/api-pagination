@@ -59,6 +59,8 @@ module ApiPagination
         use_kaminari
       when :will_paginate
         use_will_paginate
+      when :cursor
+        use_cursor_paginator
       else
         raise StandardError, "Unknown paginator: #{paginator}"
       end
@@ -105,6 +107,10 @@ WARNING
       end
 
       @paginator = :will_paginate
+    end
+
+    def use_cursor_paginator
+      @paginator = :cursor
     end
   end
 

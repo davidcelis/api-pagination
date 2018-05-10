@@ -9,3 +9,4 @@ script: bundle exec rspec
 env:
   - PAGINATOR=kaminari
   - PAGINATOR=will_paginate
+  - PAGINATOR=cursor
