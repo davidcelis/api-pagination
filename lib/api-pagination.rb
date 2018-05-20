@@ -68,24 +68,23 @@ module ApiPagination
 
     def get_default_per_page_for_kaminari(collection)
       default = Kaminari.config.default_per_page
-      detect_model(collection).default_per_page || default
-    rescue
-      default
+      extract_per_page_from_model(collection, :default_per_page) || default
     end
 
     def default_per_page_for_will_paginate(collection)
       default = WillPaginate.per_page
-      detect_model(collection).per_page || default
-    rescue
-      default
+      extract_per_page_from_model(collection, :per_page) || default
     end
 
-    def detect_model(collection)
-      if collection.respond_to?(:klass)
+    def extract_per_page_from_model(collection, accessor)
+      klass = if collection.respond_to?(:klass)
         collection.klass
       else
         collection.first.class
       end
+
+      return unless klass.respond_to?(accessor)
+      klass.send(accessor)
     end
   end
 end
