@@ -8,34 +8,42 @@ ActiveRecord::Base.establish_connection(
 )
 
 shared_examples 'produces_correct_sql' do 
-  let(:collection) { Foo.all }
-  let(:per_page) { 5 }
-
   it 'produces correct sql for first page' do
     paginated_sql = ApiPagination.paginate(collection, per_page: per_page)
-                                 .to_sql
+    .to_sql
     expect(paginated_sql).to eql(Foo.limit(per_page).offset(0).to_sql)
   end
 end
 
-if ApiPagination.config.paginator == :kaminari
-  describe 'pagination with kaminari' do
+describe 'ActiveRecord Support' do 
+  let(:collection) { Foo.all }
+  let(:per_page) { 5 }
+
+  if ApiPagination.config.paginator == :kaminari
+    context 'pagination with kaminari' do
+      before { ApiPagination.config.paginator = :kaminari }
+      include_examples 'produces_correct_sql'
+    end
+  end
+  
+  if ApiPagination.config.paginator == :will_paginate
+    require 'will_paginate/active_record'
+  
+    context 'pagination with will_paginate' do 
+      before { ApiPagination.config.paginator = :will_paginate }
+      include_examples 'produces_correct_sql'
+    end
+  end
+
+  context 'reification' do
     before do 
-      ApiPagination.config.paginator = :kaminari
+      allow(collection).to receive(:table_name).and_return('aaBB_CC_DD')
     end
 
-    include_examples 'produces_correct_sql'
+    it 'correctly produces the correct model independent of table name' do 
+      expect { ApiPagination.paginate(collection) }.not_to raise_error
+    end
   end
 end
 
-if ApiPagination.config.paginator == :will_paginate
-  require 'will_paginate/active_record'
 
-  describe 'pagination with will_paginate' do 
-    before do 
-      ApiPagination.config.paginator = :will_paginate
-    end
-
-    include_examples 'produces_correct_sql'
-  end
-end
