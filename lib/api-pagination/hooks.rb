@@ -17,4 +17,18 @@ unless defined?(Kaminari) || defined?(WillPaginate::CollectionMethods)
   WARNING
 end
 
-require 'api-pagination/railtie' if defined?(Rails)
+if defined?(Rails)
+  module ApiPagination
+    module Hooks
+      def self.rails_parent_controller
+        if Rails::VERSION::MAJOR >= 5 || defined?(ActionController::API)
+          ActionController::API
+        else
+          ActionController::Base
+        end
+      end
+    end
+  end
+
+  require 'api-pagination/railtie'
+end
