@@ -1,26 +1,3 @@
-begin; require 'rails'; rescue LoadError; end
-begin; require 'rails-api'; rescue LoadError; end
-
-if defined?(Rails)
-  module ApiPagination
-    module Hooks
-      def self.rails_parent_controller
-        if Gem::Version.new(Rails.version) >= Gem::Version.new('5') || defined?(ActionController::API)
-          ActionController::API
-        else
-          ActionController::Base
-        end
-      end
-    end
-  end
-
-  require 'rails/pagination'
-
-  ActiveSupport.on_load(:action_controller) do
-    ApiPagination::Hooks.rails_parent_controller.send(:include, Rails::Pagination)
-  end
-end
-
 begin; require 'grape'; rescue LoadError; end
 if defined?(Grape::API)
   require 'grape/pagination'
@@ -40,3 +17,4 @@ unless defined?(Kaminari) || defined?(WillPaginate::CollectionMethods)
   WARNING
 end
 
+require 'api-pagination/railtie' if defined?(Rails)
