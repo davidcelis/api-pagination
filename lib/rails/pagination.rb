@@ -27,11 +27,11 @@ module Rails
       options[:page] = ApiPagination.config.page_param(params)
       options[:per_page] ||= ApiPagination.config.per_page_param(params)
 
-      collection = ApiPagination.paginate(collection, options)
+      collection, pagy = ApiPagination.paginate(collection, options)
 
       links = (headers['Link'] || '').split(',').map(&:strip)
       url   = base_url + request.path_info
-      pages = ApiPagination.pages_from(collection)
+      pages = ApiPagination.pages_from(pagy || collection, options)
 
       pages.each do |k, v|
         new_params = request.query_parameters.merge(:page => v)
@@ -46,7 +46,7 @@ module Rails
       headers['Link'] = links.join(', ') unless links.empty?
       headers[per_page_header] = options[:per_page].to_s
       headers[page_header] = options[:page].to_s unless page_header.nil?
-      headers[total_header] = total_count(collection, options).to_s if include_total
+      headers[total_header] = total_count(pagy || collection, options).to_s if include_total
 
       return collection
     end
@@ -62,6 +62,5 @@ module Rails
     def base_url
       ApiPagination.config.base_url || request.base_url
     end
-
   end
 end

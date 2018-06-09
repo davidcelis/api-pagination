@@ -18,6 +18,7 @@ gem 'rails-api'
 gem 'grape', '>= 0.10.0'
 
 # Then choose your preferred paginator from the following:
+gem 'pagy'
 gem 'kaminari'
 gem 'will_paginate'
 
@@ -27,11 +28,11 @@ gem 'api-pagination'
 
 ## Configuration (optional)
 
-By default, api-pagination will detect whether you're using Kaminari or WillPaginate, and name headers appropriately. If you want to change any of the configurable settings, you may do so:
+By default, api-pagination will detect whether you're using Pagy, Kaminari, or WillPaginate, and it will name headers appropriately. If you want to change any of the configurable settings, you may do so:
 
 ```ruby
 ApiPagination.configure do |config|
-  # If you have both gems included, you can choose a paginator.
+  # If you have more than one gem included, you can choose a paginator.
   config.paginator = :kaminari # or :will_paginate
 
   # By default, this is set to 'Total'
@@ -58,6 +59,16 @@ ApiPagination.configure do |config|
   end
 end
 ```
+
+### Pagy-specific configuration
+
+Pagy does not have a built-in way to specify a maximum number of items per page, but `api-pagination` will check if you've set a `:max_per_page` variable. To configure this, you can use the following code somewhere in an initializer:
+
+```ruby
+Pagy::VARS[:max_per_page] = 100
+```
+
+If left unconfigured, clients can request as many items per page as they wish, so it's highly recommended that you configure this.
 
 ## Rails
 
@@ -103,7 +114,7 @@ class MoviesController < ApplicationController
 end
 ```
 
-Note that the collection sent to `paginate` _must_ respond to your paginator's methods. This is typically fine unless you're dealing with a stock Array. For Kaminari, `Kaminari.paginate_array` will be called for you behind-the-scenes. For WillPaginate, you're out of luck unless you call `require 'will_paginate/array'` somewhere. Because this pollutes `Array`, it won't be done for you automatically.
+Note that the collection sent to `paginate` _must_ respond to your paginator's methods. This is typically fine unless you're dealing with a stock Array. For Kaminari, `Kaminari.paginate_array` will be called for you behind-the-scenes. For WillPaginate, you're out of luck unless you call `require 'will_paginate/array'` somewhere. Because this pollutes `Array`, it won't be done for you automatically. If you use Pagy, it doesn't matter, because Pagy doesn't care what you're paginating. It will just work, as long as the collection responds to `count`.
 
 **NOTE:** In versions 4.4.0 and below, the `Rails::Pagination` module would end up included in `ActionController::Base` even if `ActionController::API` was defined. As of version 4.5.0, this is no longer the case. If for any reason your API controllers cannot easily changed be changed to inherit from `ActionController::API` instead, you can manually include the module:
 

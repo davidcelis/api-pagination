@@ -7,5 +7,6 @@ rvm:
   - 2.5.0
 script: bundle exec rspec
 env:
+  - PAGINATOR=pagy
   - PAGINATOR=kaminari
   - PAGINATOR=will_paginate

@@ -55,6 +55,8 @@ module ApiPagination
 
     def paginator=(paginator)
       case paginator.to_sym
+      when :pagy
+        use_pagy
       when :kaminari
         use_kaminari
       when :will_paginate
@@ -67,11 +69,12 @@ module ApiPagination
     private
 
     def set_paginator
-      if defined?(Kaminari) && defined?(WillPaginate::CollectionMethods)
+      conditions = [defined?(Pagy), defined?(Kaminari), defined?(WillPaginate::CollectionMethods)]
+      if conditions.compact.size > 1
         Kernel.warn <<-WARNING
-Warning: api-pagination relies on either Kaminari or WillPaginate, but both are
-currently active. If possible, you should remove one or the other. If you can't,
-you _must_ configure api-pagination on your own. For example:
+Warning: api-pagination relies on Pagy, Kaminari, or WillPaginate, but more than
+one are currently active. If possible, you should remove one or the other. If
+you can't, you _must_ configure api-pagination on your own. For example:
 
 ApiPagination.configure do |config|
   config.paginator = :kaminari
@@ -86,11 +89,17 @@ Kaminari.configure do |config|
 end
 
 WARNING
+      elsif defined?(Pagy)
+        use_pagy
       elsif defined?(Kaminari)
-        return use_kaminari
+        use_kaminari
       elsif defined?(WillPaginate::CollectionMethods)
-        return use_will_paginate
+        use_will_paginate
       end
+    end
+
+    def use_pagy
+      @paginator = :pagy
     end
 
     def use_kaminari

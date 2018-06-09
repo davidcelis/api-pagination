@@ -214,8 +214,11 @@ describe NumbersController, :type => :controller do
       end
     end
 
-    context 'paginate array options' do
-      shared_examples 'properly set Total header' do
+    if ApiPagination.config.paginator.to_sym == :will_paginate
+      context 'paginate array options' do
+        let(:paginate_array_total_count) { 300 }
+        let(:total_header) { 300 }
+        let(:count) { 50 }
         let(:params) do
           {
             paginate_array_total_count: paginate_array_total_count,
@@ -223,84 +226,57 @@ describe NumbersController, :type => :controller do
           }
         end
 
-        specify do
+        it 'has a properly set Total header' do
           get :index_with_paginate_array_options, params: params
 
           expect(response.header['Total']).to be_kind_of(String)
           expect(response.header['Total'].to_i).to eq total_header
         end
       end
-
-      context 'kaminari' do
-        around do |example|
-          paginator = ApiPagination.config.paginator
-          ApiPagination.config.paginator = :kaminari
-          example.run
-          ApiPagination.config.paginator = paginator
-        end
-
-        it_should_behave_like 'properly set Total header' do
-          let(:paginate_array_total_count) { 300 }
-          let(:total_header) { 300 }
-          let(:count) { 50 }
-        end
-      end
-
-      context 'will_paginate' do
-        around do |example|
-          paginator = ApiPagination.config.paginator
-          ApiPagination.config.paginator = :will_paginate
-          example.run
-          ApiPagination.config.paginator = paginator
-        end
-
-        it_should_behave_like 'properly set Total header' do
-          let(:paginate_array_total_count) { 300 }
-          let(:total_header) { 50 }
-          let(:count) { 50 }
-        end
-      end
     end
 
-    context 'default per page in model' do
-      before do
-        class Fixnum
-          @default_per_page = 6
-          @per_page = 6
+    if [:will_paginate, :kaminari].include?(ApiPagination.config.paginator.to_sym)
+      context 'default per page in model' do
+        before do
+          class Fixnum
+            @default_per_page = 6
+            @per_page = 6
 
-          class << self
-            attr_accessor :default_per_page, :per_page
+            class << self
+              attr_accessor :default_per_page, :per_page
+            end
           end
         end
-      end
 
-      after do
-        class Fixnum
-          @default_per_page = 25
-          @per_page = 25
-        end
-      end
-
-      it 'should use default per page from model' do
-        get :index_with_no_per_page, params: {count: 100}
-
-        expect(response.header['Per-Page']).to eq('6')
-      end
-
-      it 'should not fail if model does not respond to per page' do
-        class Fixnum
-          @default_per_page = nil
-          @per_page = nil
-        end
-
-        get :index_with_no_per_page, params: {count: 100}
-
-        expect(response.header['Per-Page']).to eq(
-          case ApiPagination.config.paginator
-          when :kaminari      then Kaminari.config.default_per_page.to_s
-          when :will_paginate then WillPaginate.per_page.to_s
+        after do
+          class Fixnum
+            @default_per_page = 25
+            @per_page = 25
           end
-        )
+        end
+
+        it 'should use default per page from model' do
+          get :index_with_no_per_page, params: {count: 100}
+
+          expect(response.header['Per-Page']).to eq('6')
+        end
+
+        it 'should not fail if model does not respond to per page' do
+          class Fixnum
+            @default_per_page = nil
+            @per_page = nil
+          end
+
+          get :index_with_no_per_page, params: {count: 100}
+
+          expect(response.header['Per-Page']).to eq(
+            case ApiPagination.config.paginator
+            when :pagy          then Pagy::VARS[:items].to_s
+            when :kaminari      then Kaminari.config.default_per_page.to_s
+            when :will_paginate then WillPaginate.per_page.to_s
+            end
+          )
+        end
       end
     end
   end
