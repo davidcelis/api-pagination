@@ -16,7 +16,7 @@ end
 require ENV['PAGINATOR']
 ApiPagination.config.paginator = ENV['PAGINATOR'].to_sym
 
-require 'will_paginate/array' if ENV['PAGINATOR'] == :will_paginate
+require 'will_paginate/array' if ENV['PAGINATOR'].to_sym == :will_paginate
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods

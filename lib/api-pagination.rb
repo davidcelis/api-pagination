@@ -89,7 +89,7 @@ module ApiPagination
       end
 
       collection = Kaminari.paginate_array(collection, paginate_array_options) if collection.is_a?(Array)
-      collection.page(options[:page]).per(options[:per_page])
+      [collection.page(options[:page]).per(options[:per_page]), nil]
     end
 
     def paginate_with_will_paginate(collection, options)
@@ -97,13 +97,15 @@ module ApiPagination
         options[:per_page] = default_per_page_for_will_paginate(collection)
       end
 
-      if defined?(Sequel::Dataset) && collection.kind_of?(Sequel::Dataset)
+      collection = if defined?(Sequel::Dataset) && collection.kind_of?(Sequel::Dataset)
         collection.paginate(options[:page], options[:per_page])
       else
         supported_options = [:page, :per_page, :total_entries]
         options = options.dup.keep_if { |k,v| supported_options.include?(k.to_sym) }
         collection.paginate(options)
       end
+
+      [collection, nil]
     end
 
     def get_default_per_page_for_kaminari(collection)

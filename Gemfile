@@ -9,3 +9,4 @@ gem 'pagy', require: false
 
 gem 'sqlite3', require: false
 gem 'sequel', require: false
+gem 'pry-suite'
