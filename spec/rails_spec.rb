@@ -214,7 +214,7 @@ describe NumbersController, :type => :controller do
       end
     end
 
-    if ApiPagination.config.paginator.to_sym == :will_paginate
+    if ApiPagination.config.paginator.to_sym == :kaminari
       context 'paginate array options' do
         let(:paginate_array_total_count) { 300 }
         let(:total_header) { 300 }
