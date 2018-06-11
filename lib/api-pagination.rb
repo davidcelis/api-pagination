@@ -21,7 +21,7 @@ module ApiPagination
     end
 
     def pages_from(collection, options = {})
-      return pagy_pages_from(collection) if collection.is_a?(Pagy)
+      return pagy_pages_from(collection) if defined?(Pagy) && collection.is_a?(Pagy)
 
       {}.tap do |pages|
         unless collection.first_page?
