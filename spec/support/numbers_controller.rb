@@ -1,4 +1,4 @@
-require 'action_controller'
+require 'action_controller/railtie'
 require 'api-pagination/hooks'
 require 'ostruct'
 
@@ -59,7 +59,7 @@ class NumbersSerializer
   end
 end
 
-class NumbersController < ApiPagination::Hooks.rails_parent_controller
+class NumbersController < ActionController::API
   include Rails.application.routes.url_helpers
 
   def index
@@ -99,3 +99,5 @@ class NumbersController < ApiPagination::Hooks.rails_parent_controller
     render json: NumbersSerializer.new(numbers)
   end
 end
+
+ApiPagination::Railtie.initializers.each(&:run)

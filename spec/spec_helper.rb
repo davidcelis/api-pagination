@@ -3,14 +3,20 @@ require 'support/numbers_api'
 require 'api-pagination'
 
 if ENV['PAGINATOR'].nil?
-  warn 'No PAGINATOR set. Defaulting to kaminari. To test against will_paginate, run `PAGINATOR=will_paginate bundle exec rspec`'
-  ENV['PAGINATOR'] = 'kaminari'
+  warn <<-WARNING
+No PAGINATOR set. Defaulting to pagy.
+
+To test against kaminari, run `PAGINATOR=kaminari bundle exec rspec`
+To test against will_paginate, run `PAGINATOR=will_paginate bundle exec rspec`
+WARNING
+
+  ENV['PAGINATOR'] = 'pagy'
 end
 
 require ENV['PAGINATOR']
 ApiPagination.config.paginator = ENV['PAGINATOR'].to_sym
 
-require 'will_paginate/array'
+require 'will_paginate/array' if ENV['PAGINATOR'].to_sym == :will_paginate
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods

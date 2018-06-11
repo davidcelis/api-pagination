@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'grape', '>= 0.10.0'
-  s.add_development_dependency 'railties', '>= 3.0.0'
-  s.add_development_dependency 'actionpack', '>= 3.0.0'
+  s.add_development_dependency 'railties', '>= 5.0.0'
+  s.add_development_dependency 'actionpack', '>= 5.0.0'
   s.add_development_dependency 'sequel', '>= 4.9.0'
   s.add_development_dependency 'activerecord-nulldb-adapter', '>= 0.3.8'
 end
