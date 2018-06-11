@@ -4,8 +4,10 @@ require 'nulldb_rspec'
 
 ActiveRecord::Base.establish_connection(
   adapter: :nulldb,
-  schema: 'support/active_record/schema'
+  schema: 'spec/support/active_record/schema.rb'
 )
+
+NullDB.configure { |ndb| def ndb.project_root; Dir.pwd; end; }
 
 shared_examples 'produces_correct_sql' do 
   it 'produces correct sql for first page' do
@@ -35,13 +37,16 @@ describe 'ActiveRecord Support' do
     end
   end
 
-  context 'reification' do
-    before do 
-      allow(collection).to receive(:table_name).and_return('aaBB_CC_DD')
+  context 'reflections' do
+    it 'invokes the correct methods to determine type' do 
+      expect(collection).to receive(:klass).at_least(:once)
+                                           .and_call_original
+      ApiPagination.paginate(collection)
     end
 
-    it 'correctly produces the correct model independent of table name' do 
-      expect { ApiPagination.paginate(collection) }.not_to raise_error
+    it 'does not fail if table name is not snake cased class name' do
+      allow(collection).to receive(:table_name).and_return(SecureRandom.uuid)
+      expect { ApiPagination.paginate(collection) }.to_not raise_error
     end
   end
 end
