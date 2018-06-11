@@ -281,6 +281,14 @@ describe NumbersController, :type => :controller do
         end
       end
 
+      after :all do 
+        class Fixnum
+          class << self
+            undef_method :default_per_page, :per_page
+          end
+        end
+      end
+
       it 'should use default per page from model' do
         get :index_with_no_per_page, params: {count: 100}
 
@@ -302,17 +310,10 @@ describe NumbersController, :type => :controller do
           end
         )
       end
+    end
 
-      # This spec has to be last because if we undefine these methods
-      # at runtime and then invoke another test that uses them, they will
-      # raise a NoMethodError
+    context 'default per page in objects without paginator defaults' do 
       it 'should not fail if model does not respond to per page' do
-        class Fixnum
-          class << self
-            undef_method :default_per_page, :per_page
-          end
-        end
-
         get :index_with_no_per_page, params: {count: 100}
 
         expect(response.header['Per-Page']).to eq(
