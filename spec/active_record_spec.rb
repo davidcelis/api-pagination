@@ -23,7 +23,6 @@ describe 'ActiveRecord Support' do
 
   if ApiPagination.config.paginator == :kaminari
     context 'pagination with kaminari' do
-      before { ApiPagination.config.paginator = :kaminari }
       include_examples 'produces_correct_sql'
     end
   end
@@ -32,7 +31,6 @@ describe 'ActiveRecord Support' do
     require 'will_paginate/active_record'
   
     context 'pagination with will_paginate' do 
-      before { ApiPagination.config.paginator = :will_paginate }
       include_examples 'produces_correct_sql'
     end
   end
