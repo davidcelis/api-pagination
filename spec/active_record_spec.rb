@@ -20,19 +20,13 @@ end
 describe 'ActiveRecord Support' do 
   let(:collection) { Foo.all }
   let(:per_page) { 5 }
-
-  if ApiPagination.config.paginator == :kaminari
-    context 'pagination with kaminari' do
-      include_examples 'produces_correct_sql'
-    end
-  end
   
   if ApiPagination.config.paginator == :will_paginate
     require 'will_paginate/active_record'
-  
-    context 'pagination with will_paginate' do 
-      include_examples 'produces_correct_sql'
-    end
+  end
+
+  context "pagination with #{ApiPagination.config.paginator}" do 
+    include_examples 'produces_correct_sql'
   end
 
   context 'reflections' do

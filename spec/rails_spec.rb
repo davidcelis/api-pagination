@@ -294,6 +294,7 @@ describe NumbersController, :type => :controller do
 
         expect(response.header['Per-Page']).to eq(
           case ApiPagination.config.paginator
+          when :pagy          then Pagy::VARS[:items].to_s
           when :kaminari      then Kaminari.config.default_per_page.to_s
           when :will_paginate then WillPaginate.per_page.to_s
           end
