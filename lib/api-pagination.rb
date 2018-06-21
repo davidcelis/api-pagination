@@ -64,7 +64,8 @@ module ApiPagination
     end
 
     def pagy_from(collection, options)
-      Pagy.new(count: collection.count, items: options[:per_page], page: options[:page])
+      count = collection.is_a?(Array) ? collection.count : collection.count(:all)
+      Pagy.new(count: count, items: options[:per_page], page: options[:page])
     end
 
     def pagy_pages_from(pagy)
