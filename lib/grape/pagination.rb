@@ -46,7 +46,7 @@ module Grape
           params do
             optional :page,     :type   => Integer, :default => 1,
                                 :desc   => 'Page of results to fetch.'
-            optional :per_page, :type   => Integer,
+            optional :per_page, :type   => Integer, :default => options[:per_page],
                                 :desc   => 'Number of results to return per page.',
                                 :values => per_page_values
           end
