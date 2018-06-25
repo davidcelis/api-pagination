@@ -1,7 +1,7 @@
 # api-pagination
 
 Paginate in your headers, not in your response body.
-This follows the proposed [RFC-5988](http://tools.ietf.org/html/rfc5988) standard for Web linking.
+This follows the proposed [RFC-8288](https://tools.ietf.org/html/rfc8288) standard for Web linking.
 
 ## Installation
 
