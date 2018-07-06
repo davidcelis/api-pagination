@@ -8,7 +8,8 @@ describe NumbersController, :type => :controller do
   before { request.host = 'example.org' }
 
   describe 'GET #index' do
-    let(:links) { response.headers['Link'].split(', ') }
+    let(:link) { response.headers['Link'] }
+    let(:links) { link.split(', ') }
     let(:total) { response.headers['Total'].to_i }
     let(:per_page) { response.headers['Per-Page'].to_i }
 
@@ -132,6 +133,12 @@ describe NumbersController, :type => :controller do
         get :index, params: {count: 10}
 
         expect(response.header['Total']).to be_nil
+      end
+
+      it 'should not include a link with rel "last"' do
+        get :index, params: { count: 100 }
+
+        expect(link).to_not include('rel="last"')
       end
 
       after { ApiPagination.config.include_total = true }

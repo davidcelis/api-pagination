@@ -6,7 +6,8 @@ require 'support/shared_examples/last_page'
 
 describe NumbersAPI do
   describe 'GET #index' do
-    let(:links) { last_response.headers['Link'].split(', ') }
+    let(:link) { last_response.headers['Link'] }
+    let(:links) { link.split(', ') }
     let(:total) { last_response.headers['Total'].to_i }
     let(:per_page) { last_response.headers['Per-Page'].to_i }
 
@@ -137,6 +138,12 @@ describe NumbersAPI do
         get '/numbers', count: 10
 
         expect(last_response.header['Total']).to be_nil
+      end
+
+      it 'should not include a link with rel "last"' do
+        get '/numbers', count: 100
+
+        expect(link).to_not include('rel="last"')
       end
 
       after { ApiPagination.config.include_total = true }
