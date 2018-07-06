@@ -76,7 +76,7 @@ module ApiPagination
         end
 
         unless pagy.page == pagy.pages
-          pages[:last] = pagy.pages
+          pages[:last] = pagy.pages if ApiPagination.config.include_total
           pages[:next] = pagy.next
         end
       end
