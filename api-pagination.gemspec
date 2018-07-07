@@ -21,5 +21,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'railties', '>= 5.0.0'
   s.add_development_dependency 'actionpack', '>= 5.0.0'
   s.add_development_dependency 'sequel', '>= 4.9.0'
-  s.add_development_dependency 'activerecord-nulldb-adapter', '>= 0.3.8'
+  s.add_development_dependency 'activerecord-nulldb-adapter', '>= 0.3.9'
 end
