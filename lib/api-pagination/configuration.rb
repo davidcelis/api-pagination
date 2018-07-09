@@ -50,7 +50,11 @@ module ApiPagination
     end
 
     def paginator
-      @paginator || set_paginator
+      if instance_variable_defined? :@paginator
+        @paginator
+      else
+        set_paginator
+      end
     end
 
     def paginator=(paginator)
