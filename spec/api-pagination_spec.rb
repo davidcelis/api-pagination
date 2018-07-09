@@ -2,23 +2,45 @@ require 'spec_helper'
 
 describe ApiPagination do
   let(:collection) {(1..100).to_a}
+  let(:active_record_relation) {double("ActiveRecord_Relation").as_null_object}
   let(:paginate_array_options) {{ total_count: 1000 }}
 
   describe "#paginate" do
     if ENV['PAGINATOR'].to_sym == :kaminari
       context 'Using kaminari' do
-        it 'should accept paginate_array_options option' do
-          expect(Kaminari).to receive(:paginate_array)
-                                .with(collection, paginate_array_options)
-                                .and_call_original
+        describe '.paginate' do
+          it 'should accept paginate_array_options option' do
+            expect(Kaminari).to receive(:paginate_array)
+              .with(collection, paginate_array_options)
+              .and_call_original
 
-          ApiPagination.paginate(
-            collection,
-            {
-              per_page:               30,
-              paginate_array_options: paginate_array_options
-            }
-          )
+            ApiPagination.paginate(
+              collection,
+              {
+                per_page: 30,
+                paginate_array_options: paginate_array_options
+              }
+            )
+          end
+
+          context 'configured not to include the total' do
+            before { ApiPagination.config.include_total = false }
+
+            context 'and paginating an array' do
+              it 'should not call without_count on the collection' do
+                expect(collection).to_not receive :without_count
+                ApiPagination.paginate(collection)
+              end
+            end
+            context 'and paginating an active record relation' do
+              it 'should call without_count on the relation' do
+                expect(active_record_relation).to receive :without_count
+                ApiPagination.paginate(active_record_relation)
+              end
+            end
+
+            after { ApiPagination.config.include_total = true }
+          end
         end
 
         describe '.pages_from' do

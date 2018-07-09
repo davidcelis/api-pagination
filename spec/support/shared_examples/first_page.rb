@@ -1,10 +1,10 @@
 shared_examples 'an endpoint with a first page' do
   it 'should not give a link with rel "first"' do
-    expect(links).not_to include('rel="first"')
+    expect(link).not_to include('rel="first"')
   end
 
   it 'should not give a link with rel "prev"' do
-    expect(links).not_to include('rel="prev"')
+    expect(link).not_to include('rel="prev"')
   end
 
   it 'should give a link with rel "last"' do
