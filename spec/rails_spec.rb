@@ -262,13 +262,21 @@ describe NumbersController, :type => :controller do
           end
         end
 
+        after :all do 
+          class Fixnum
+            class << self
+              undef_method :default_per_page, :per_page
+            end
+          end
+        end
+
         it 'should use default per page from model' do
           get :index_with_no_per_page, params: {count: 100}
 
           expect(response.header['Per-Page']).to eq('6')
         end
 
-        it 'should not fail if model does not respond to per page' do
+        it 'should not fail if the model yields nil for per page' do
           class Fixnum
             @default_per_page = nil
             @per_page = nil
@@ -284,6 +292,20 @@ describe NumbersController, :type => :controller do
             end
           )
         end
+      end
+    end
+
+    context 'default per page in objects without paginator defaults' do 
+      it 'should not fail if model does not respond to per page' do
+        get :index_with_no_per_page, params: {count: 100}
+
+        expect(response.header['Per-Page']).to eq(
+          case ApiPagination.config.paginator
+          when :pagy          then Pagy::VARS[:items].to_s
+          when :kaminari      then Kaminari.config.default_per_page.to_s
+          when :will_paginate then WillPaginate.per_page.to_s
+          end
+        )
       end
     end
   end
