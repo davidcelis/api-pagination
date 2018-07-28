@@ -4,6 +4,8 @@ module ApiPagination
 
     attr_accessor :per_page_header
 
+    attr_accessor :total_pages_header
+
     attr_accessor :page_header
 
     attr_accessor :include_total
@@ -17,6 +19,7 @@ module ApiPagination
     def initialize
       @total_header    = 'Total'
       @per_page_header = 'Per-Page'
+      @total_pages_header = 'Total-Pages'
       @page_header     = nil
       @include_total   = true
       @base_url   = nil
@@ -50,11 +53,7 @@ module ApiPagination
     end
 
     def paginator
-      if instance_variable_defined? :@paginator
-        @paginator
-      else
-        set_paginator
-      end
+      @paginator || set_paginator
     end
 
     def paginator=(paginator)
