@@ -97,6 +97,15 @@ class MoviesController < ApplicationController
     # params[:per_page] (which defaults to 25) will be used.
     paginate json: actors, per_page: 10
   end
+
+  # GET /movies/:id/reviews
+  def reviews
+    reviews = Movie.find(params[:id]).reviews
+
+    # Override any configuration setting on request basis.
+    # For example you may want to disable the total count since the count query is slow.
+    paginate json: actors, total_count: false
+  end
 end
 ```
 
@@ -116,6 +125,13 @@ class MoviesController < ApplicationController
     actors = paginate Movie.find(params[:id]).actors, per_page: 10
 
     render json: ActorsSerializer.new(actors)
+  end
+
+  # GET /movies/:id/reviews
+  def reviews
+    reviews = paginate Movie.find(params[:id]).reviews, total_count: false
+
+    render json: ReviewSerializer.new(reviews)
   end
 end
 ```

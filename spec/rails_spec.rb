@@ -219,6 +219,29 @@ describe NumbersController, :type => :controller do
           expect(response.header['Per-Page']).to eq('2')
         end
       end
+
+      context 'request option to not include the total' do
+        it 'should not include a Total header' do
+          get :index_with_inline_options, params: {count: 10}
+
+          expect(response.header['Total']).to be_nil
+        end
+
+        it 'should not include a link with rel "last"' do
+          get :index_with_inline_options, params: { count: 100 }
+
+          expect(link).to_not include('rel="last"')
+        end
+      end
+
+      context 'request option to change page_header' do
+        it 'should give a X-Page header' do
+          get :index_with_inline_options, params: {count: 10}
+
+          expect(response.headers.keys).to include('X-Page')
+          expect(response.headers['X-Page'].to_i).to eq(1)
+        end
+      end
     end
 
     if ApiPagination.config.paginator.to_sym == :kaminari
