@@ -8,11 +8,12 @@ module Rails
 
       return _paginate_collection(collection, options) if collection
 
-      collection = options[:json] || options[:xml]
+      response_format = _discover_format(options)
+
+      collection = options[response_format]
       collection = _paginate_collection(collection, options)
 
-      options[:json] = collection if options[:json]
-      options[:xml]  = collection if options[:xml]
+      options[response_format] = collection if options[response_format]
 
       render options
     end
@@ -22,6 +23,12 @@ module Rails
     end
 
     private
+
+    def _discover_format(options)
+      for response_format in ApiPagination.config.response_formats
+        return response_format if options.key?(response_format)
+      end
+    end
 
     def _paginate_collection(collection, options={})
       options[:page] = ApiPagination.config.page_param(params)

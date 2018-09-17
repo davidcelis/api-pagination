@@ -42,6 +42,9 @@ ApiPagination.configure do |config|
   # Optional: set this to add a header with the current page number.
   config.page_header = 'X-Page'
 
+  # Optional: set this to add other response format. Useful with tools that define :jsonapi format
+  config.response_formats = [:json, :xml, :jsonapi]
+
   # Optional: what parameter should be used to set the page option
   config.page_param = :page
   # or
