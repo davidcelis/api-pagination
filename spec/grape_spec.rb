@@ -5,6 +5,8 @@ require 'support/shared_examples/middle_page'
 require 'support/shared_examples/last_page'
 
 describe NumbersAPI do
+  it { is_expected.to be_kind_of(Grape::Pagination) }
+
   describe 'GET #index' do
     let(:link) { last_response.headers['Link'] }
     let(:links) { link.split(', ') }
