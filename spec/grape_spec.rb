@@ -151,6 +151,18 @@ describe NumbersAPI do
       after { ApiPagination.config.include_total = true }
     end
 
+    context 'configured not to include the links' do
+      before { ApiPagination.config.include_links = false }
+
+      it 'should not include a Link header' do
+        get '/numbers', count: 10
+
+        expect(last_response.header['Link']).to be_nil
+      end
+
+      after { ApiPagination.config.include_links = true }
+    end
+
     context 'with query string including array parameter' do
       before do
         get '/numbers', { count: 100, parity: ['odd', 'even']}

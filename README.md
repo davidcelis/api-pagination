@@ -59,7 +59,11 @@ ApiPagination.configure do |config|
     params[:page][:size] if params[:page].is_a?(ActionController::Parameters)
   end
  
-  # Optional: Include the total and last_page link header
+  # Optional: Include links for next, previous and last pages header
+  # By default, this is set to true
+  config.include_links = false
+
+  # Optional: Include the total header and last_page link header
   # By default, this is set to true
   # Note: When using kaminari, this prevents the count call to the database
   config.include_total = false 

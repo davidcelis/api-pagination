@@ -8,6 +8,8 @@ module ApiPagination
 
     attr_accessor :include_total
 
+    attr_accessor :include_links
+
     attr_accessor :base_url
 
     attr_accessor :response_formats
@@ -21,6 +23,7 @@ module ApiPagination
       @per_page_header = 'Per-Page'
       @page_header     = nil
       @include_total   = true
+      @include_links   = true
       @base_url   = nil
       @response_formats = [:json, :xml]
     end

@@ -144,6 +144,18 @@ describe NumbersController, :type => :controller do
       after { ApiPagination.config.include_total = true }
     end
 
+    context 'configured not to include the total' do
+      before { ApiPagination.config.include_links = false }
+
+      it 'should not include a Link header' do
+        get :index, params: { count: 10 }
+
+        expect(response.header['Link']).to be_nil
+      end
+
+      after { ApiPagination.config.include_links = true }
+    end
+
     context 'custom page param' do
       context 'page_param as a symbol' do
         before do
