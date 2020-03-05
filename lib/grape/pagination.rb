@@ -2,13 +2,14 @@ module Grape
   module Pagination
     def self.included(base)
       Grape::Endpoint.class_eval do
-        def paginate(collection)
+        def paginate(collection, options = {})
           per_page = ApiPagination.config.per_page_param(params) || route_setting(:per_page)
 
           options = {
             :page     => ApiPagination.config.page_param(params),
             :per_page => [per_page, route_setting(:max_per_page)].compact.min
-          }
+          }.merge(options)
+
           collection, pagy = ApiPagination.paginate(collection, options)
 
           links = (header['Link'] || "").split(',').map(&:strip)
