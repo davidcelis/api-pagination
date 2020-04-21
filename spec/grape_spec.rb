@@ -83,7 +83,7 @@ describe NumbersAPI do
         before { get '/numbers_with_enforced_max_per_page', :count => 100, :per_page => 30 }
 
         it 'should not allow value above the max_per_page_limit' do
-          body = '{"error":"per_page is invalid. Can only ask for at most 25 records per request."}'
+          body = '{"error":"per_page only allows at most 25 records per request."}'
 
           expect(last_response.body).to eq(body)
         end

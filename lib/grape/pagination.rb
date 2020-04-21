@@ -53,7 +53,7 @@ module Grape
                                 :desc    => 'Number of results to return per page.',
                                 :values  => {
                                               :value   =>  per_page_values,
-                                              :message => "is invalid. Can only ask for at most #{options[:max_per_page]} records per request."
+                                              :message => "only allows at most #{options[:max_per_page]} records per request."
                                 }
           end
         end
