@@ -12,7 +12,7 @@ module ApiPagination
       when :pagy
         paginate_with_pagy(collection, options)
       when :kaminari
-        paginate_with_kaminari(collection, options, options[:paginate_array_options] || {})
+        paginate_with_kaminari(collection, options)
       when :will_paginate
         paginate_with_will_paginate(collection, options)
       else
@@ -87,7 +87,7 @@ module ApiPagination
       end
     end
 
-    def paginate_with_kaminari(collection, options, paginate_array_options = {})
+    def paginate_with_kaminari(collection, options)
       if Kaminari.config.max_per_page && options[:per_page] > Kaminari.config.max_per_page
         options[:per_page] = Kaminari.config.max_per_page
       elsif options[:per_page] <= 0
@@ -97,11 +97,11 @@ module ApiPagination
       if collection.is_a?(Array) || (options.key?(:paginate_array) && !!options[:paginate_array])
         # These options are needed for kaminari to paginate an array
         # https://github.com/kaminari/kaminari/blob/master/kaminari-core/lib/kaminari/models/array_extension.rb#L70
-        paginate_array_options.merge(
+        paginate_array_options = {
           limit:       options[:per_page],
           offset:      options[:per_page] * (options[:page] - 1),
           total_count: collection.respond_to?(:count) ? collection.count : collection.length
-        )
+        }
         collection = Kaminari.paginate_array(collection, paginate_array_options)
       end
 
