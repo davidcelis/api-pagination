@@ -95,6 +95,13 @@ module ApiPagination
       end
 
       if collection.is_a?(Array) || (options.key?(:paginate_array) && !!options[:paginate_array])
+        # These options are needed for kaminari to paginate an array
+        # https://github.com/kaminari/kaminari/blob/master/kaminari-core/lib/kaminari/models/array_extension.rb#L70
+        paginate_array_options.merge(
+          limit:       options[:per_page],
+          offset:      options[:per_page] * (options[:page] - 1),
+          total_count: collection.respond_to?(:count) ? collection.count : collection.length
+        )
         collection = Kaminari.paginate_array(collection, paginate_array_options)
       end
 
