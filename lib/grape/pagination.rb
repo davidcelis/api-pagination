@@ -45,11 +45,16 @@ module Grape
           per_page_values = enforce_max_per_page ? 0..options[:max_per_page] : nil
 
           params do
-            optional :page,     :type   => Integer, :default => 1,
-                                :desc   => 'Page of results to fetch.'
-            optional :per_page, :type   => Integer, :default => options[:per_page],
-                                :desc   => 'Number of results to return per page.',
-                                :values => per_page_values
+            optional :page,     :type    => Integer,
+                                :default => 1,
+                                :desc    => 'Page of results to fetch.'
+            optional :per_page, :type    => Integer,
+                                :default => options[:per_page],
+                                :desc    => 'Number of results to return per page.',
+                                :values  => {
+                                              :value   =>  per_page_values,
+                                              :message => "is invalid. Can only ask for at most #{options[:max_per_page]} records per request."
+                                }
           end
         end
       end
