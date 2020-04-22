@@ -96,7 +96,7 @@ module ApiPagination
 
       if collection.is_a?(Array) || (options.key?(:paginate_array) && !!options[:paginate_array])
         # These options are needed for kaminari to paginate an array
-        # https://github.com/kaminari/kaminari/blob/master/kaminari-core/lib/kaminari/models/array_extension.rb#L70
+        # https://github.com/kaminari/kaminari/blob/f90509f398e0fec1713d9c982b7439db5123ed3f/kaminari-core/lib/kaminari/models/array_extension.rb#L70
         paginate_array_options = {
           limit:       options[:per_page],
           offset:      options[:per_page] * (options[:page] - 1),
