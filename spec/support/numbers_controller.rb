@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       get :index_with_custom_render
       get :index_with_no_per_page
       get :index_with_paginate_array_options
+      get :index_without_total
     end
   end
 end
@@ -97,6 +98,10 @@ class NumbersController < ActionController::API
     numbers = paginate numbers, paginate_array_options: {total_count: total_count}
 
     render json: NumbersSerializer.new(numbers)
+  end
+
+  def index_without_total
+    paginate json: (1..100).to_a, exclude_total: true
   end
 end
 
