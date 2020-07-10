@@ -2,13 +2,20 @@ module Grape
   module Pagination
     def self.included(base)
       Grape::Endpoint.class_eval do
-        def paginate(collection)
-          per_page = ApiPagination.config.per_page_param(params) || route_setting(:per_page)
+        def paginate(collection, options = {})
+          per_page           = ApiPagination.config.per_page_param(params) || route_setting(:per_page)
+          options[:per_page] = [per_page, route_setting(:max_per_page)].compact.min
+          options[:page]     = ApiPagination.config.page_param(params)
 
-          options = {
-            :page     => ApiPagination.config.page_param(params),
-            :per_page => [per_page, route_setting(:max_per_page)].compact.min
+          default_options = {
+            :total_header    => ApiPagination.config.total_header,
+            :per_page_header => ApiPagination.config.per_page_header,
+            :page_header     => ApiPagination.config.page_header,
+            :include_total   => ApiPagination.config.include_total,
+            :paginator       => ApiPagination.config.paginator
           }
+          options.reverse_merge!(default_options)
+
           collection, pagy = ApiPagination.paginate(collection, options)
 
           links = (header['Link'] || "").split(',').map(&:strip)
@@ -21,15 +28,10 @@ module Grape
             links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
           end
 
-          total_header    = ApiPagination.config.total_header
-          per_page_header = ApiPagination.config.per_page_header
-          page_header     = ApiPagination.config.page_header
-          include_total   = ApiPagination.config.include_total
-
-          header 'Link',          links.join(', ') unless links.empty?
-          header total_header,    ApiPagination.total_from(pagy || collection).to_s if include_total
-          header per_page_header, options[:per_page].to_s
-          header page_header,     options[:page].to_s unless page_header.nil?
+          header 'Link',                    links.join(', ') unless links.empty?
+          header options[:total_header],    ApiPagination.total_from(pagy || collection, options).to_s if options[:include_total]
+          header options[:per_page_header], options[:per_page].to_s
+          header options[:page_header],     options[:page].to_s unless options[:page_header].nil?
 
           return collection
         end

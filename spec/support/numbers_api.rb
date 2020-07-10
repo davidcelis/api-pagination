@@ -38,4 +38,13 @@ class NumbersAPI < Grape::API
   get :numbers_with_enforced_max_per_page  do
     paginate (1..params[:count]).to_a
   end
+
+  desc 'Return some paginated set of numbers with inline options'
+  paginate :per_page => 10
+  params do
+    requires :count, :type => Integer
+  end
+  get :numbers_with_inline_options do
+    paginate (1..params[:count]).to_a, include_total: false, page_header: 'X-Page'
+  end
 end

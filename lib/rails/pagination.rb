@@ -32,7 +32,15 @@ module Rails
 
     def _paginate_collection(collection, options={})
       options[:page] = ApiPagination.config.page_param(params)
-      options[:per_page] ||= ApiPagination.config.per_page_param(params)
+      default_options = {
+        :per_page        => ApiPagination.config.per_page_param(params),
+        :total_header    => ApiPagination.config.total_header,
+        :per_page_header => ApiPagination.config.per_page_header,
+        :page_header     => ApiPagination.config.page_header,
+        :include_total   => ApiPagination.config.include_total,
+        :paginator       => ApiPagination.config.paginator
+      }
+      options.reverse_merge!(default_options)
 
       collection, pagy = ApiPagination.paginate(collection, options)
 
@@ -45,25 +53,20 @@ module Rails
         links << %(<#{url}?#{new_params.to_param}>; rel="#{k}")
       end
 
-      total_header    = ApiPagination.config.total_header
-      per_page_header = ApiPagination.config.per_page_header
-      page_header     = ApiPagination.config.page_header
-      include_total   = ApiPagination.config.include_total
-
       headers['Link'] = links.join(', ') unless links.empty?
-      headers[per_page_header] = options[:per_page].to_s
-      headers[page_header] = options[:page].to_s unless page_header.nil?
-      headers[total_header] = total_count(pagy || collection, options).to_s if include_total
+      headers[options[:per_page_header]] = options[:per_page].to_s
+      headers[options[:page_header]] = options[:page].to_s unless options[:page_header].nil?
+      headers[options[:total_header]] = total_count(pagy || collection, options).to_s if options[:include_total]
 
       return collection
     end
 
     def total_count(collection, options)
-      total_count = if ApiPagination.config.paginator == :kaminari
+      total_count = if options[:paginator] == :kaminari
         paginate_array_options = options[:paginate_array_options]
         paginate_array_options[:total_count] if paginate_array_options
       end
-      total_count || ApiPagination.total_from(collection)
+      total_count || ApiPagination.total_from(collection, options)
     end
 
     def base_url
