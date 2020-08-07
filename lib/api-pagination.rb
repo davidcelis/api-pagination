@@ -108,9 +108,7 @@ module ApiPagination
       collection = if defined?(Sequel::Dataset) && collection.kind_of?(Sequel::Dataset)
         collection.paginate(options[:page], options[:per_page])
       else
-        supported_options = [:page, :per_page, :total_entries]
-        options = options.dup.keep_if { |k,v| supported_options.include?(k.to_sym) }
-        collection.paginate(options)
+        collection.paginate(options.slice(:page, :per_page, :total_entries))
       end
 
       [collection, nil]
