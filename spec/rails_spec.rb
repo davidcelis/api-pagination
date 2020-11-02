@@ -240,6 +240,20 @@ describe NumbersController, :type => :controller do
           expect(response.header['Total'].to_i).to eq total_header
         end
       end
+
+      context 'when only one page of results' do
+        it 'uses the collection size instead of the DB count' do
+          expect(ApiPagination).not_to receive(:total_from)
+          get :index, params: {count: 9}
+        end
+      end
+
+      context 'when more than one page of results' do
+        it 'uses the DB count instead of the collection size' do
+          expect(ApiPagination).to receive(:total_from)
+          get :index, params: {count: 30}
+        end
+      end
     end
 
     if [:will_paginate, :kaminari].include?(ApiPagination.config.paginator.to_sym)

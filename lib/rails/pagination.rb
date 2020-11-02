@@ -61,8 +61,14 @@ module Rails
     def total_count(collection, options)
       total_count = if ApiPagination.config.paginator == :kaminari
         paginate_array_options = options[:paginate_array_options]
-        paginate_array_options[:total_count] if paginate_array_options
+
+        if paginate_array_options
+          paginate_array_options[:total_count]
+        elsif collection.current_page == 1 && collection.size < collection.limit_value
+          collection.size
+        end
       end
+
       total_count || ApiPagination.total_from(collection)
     end
 
