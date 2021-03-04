@@ -62,7 +62,11 @@ ApiPagination.configure do |config|
   # Optional: Include the total and last_page link header
   # By default, this is set to true
   # Note: When using kaminari, this prevents the count call to the database
-  config.include_total = false 
+  config.include_total = false
+
+  # Optional: Change base url of link header
+  # By default, will take the request's base_url
+  config.base_url = 'BASE_URL'
 end
 ```
 
