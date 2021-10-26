@@ -11,7 +11,7 @@ describe ApiPagination do
         describe '.paginate' do
           it 'should accept paginate_array_options option' do
             expect(Kaminari).to receive(:paginate_array)
-              .with(collection, paginate_array_options)
+              .with(collection, **paginate_array_options)
               .and_call_original
 
             ApiPagination.paginate(

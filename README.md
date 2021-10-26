@@ -58,11 +58,11 @@ ApiPagination.configure do |config|
   config.per_page_param do |params|
     params[:page][:size] if params[:page].is_a?(ActionController::Parameters)
   end
- 
+
   # Optional: Include the total and last_page link header
   # By default, this is set to true
   # Note: When using kaminari, this prevents the count call to the database
-  config.include_total = false 
+  config.include_total = false
 end
 ```
 
@@ -71,7 +71,7 @@ end
 Pagy does not have a built-in way to specify a maximum number of items per page, but `api-pagination` will check if you've set a `:max_per_page` variable. To configure this, you can use the following code somewhere in an initializer:
 
 ```ruby
-Pagy::VARS[:max_per_page] = 100
+Pagy::DEFAULT[:max_per_page] = 100
 ```
 
 If left unconfigured, clients can request as many items per page as they wish, so it's highly recommended that you configure this.
