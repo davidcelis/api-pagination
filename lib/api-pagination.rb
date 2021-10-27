@@ -96,6 +96,18 @@ module ApiPagination
 
       collection = Kaminari.paginate_array(collection, **paginate_array_options) if collection.is_a?(Array)
       collection = collection.page(options[:page]).per(options[:per_page])
+
+      if !collection.is_a?(Array)
+        if ApiPagination.config.include_total
+          # Preload to avoid counting if we are on the last page.
+          #
+          # See: https://github.com/kaminari/kaminari/blob/cd8601cc42b67267c15a13174bc2fc9bd5de1032/kaminari-activerecord/lib/kaminari/activerecord/active_record_relation_methods.rb#L20-L26
+          collection.load
+        else
+          collection.without_count
+        end
+      end
+
       collection.without_count if !collection.is_a?(Array) && !ApiPagination.config.include_total
       [collection, nil]
     end
