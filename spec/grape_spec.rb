@@ -161,5 +161,28 @@ describe NumbersAPI do
         expect(links).to include('<http://example.org/numbers?count=100&page=2&parity%5B%5D=odd&parity%5B%5D=even>; rel="next"')
       end
     end
+
+    context 'request option to not include the total' do
+      it 'should not include a Total header' do
+        get '/numbers_with_inline_options', count: 10
+
+        expect(last_response.header['Total']).to be_nil
+      end
+
+      it 'should not include a link with rel "last"' do
+        get '/numbers_with_inline_options', count: 100
+
+        expect(link).to_not include('rel="last"')
+      end
+    end
+
+    context 'request option to change page_header' do
+      it 'should give a X-Page header' do
+        get '/numbers_with_inline_options', count: 10
+
+        expect(last_response.headers.keys).to include('X-Page')
+        expect(last_response.headers['X-Page'].to_i).to eq(1)
+      end
+    end
   end
 end

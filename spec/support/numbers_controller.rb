@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       get :index_with_custom_render
       get :index_with_no_per_page
       get :index_with_paginate_array_options
+      get :index_with_inline_options
     end
   end
 end
@@ -97,6 +98,16 @@ class NumbersController < ActionController::API
     numbers = paginate numbers, paginate_array_options: {total_count: total_count}
 
     render json: NumbersSerializer.new(numbers)
+  end
+
+  def index_with_inline_options
+    total = params.fetch(:count).to_i
+    paginate(
+      :json => (1..total).to_a,
+      :per_page => 10,
+      :include_total => false,
+      :page_header => 'X-Page'
+    )
   end
 end
 
