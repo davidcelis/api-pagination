@@ -1,6 +1,6 @@
 module ApiPagination
   class Version
-    MAJOR = 5
+    MAJOR = 6
     MINOR = 0
     PATCH = 0
 
