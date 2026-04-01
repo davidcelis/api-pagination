@@ -47,10 +47,10 @@ module ApiPagination
     private
 
     def paginate_with_pagy(collection, options)
-      if Pagy.options[:max_per_page] && options[:per_page] > Pagy.options[:max_per_page]
-        options[:per_page] = Pagy.options[:max_per_page]
+      if Pagy::OPTIONS[:max_per_page] && options[:per_page] > Pagy::OPTIONS[:max_per_page]
+        options[:per_page] = Pagy::OPTIONS[:max_per_page]
       elsif options[:per_page] <= 0
-        options[:per_page] = Pagy.options[:limit]
+        options[:per_page] = Pagy::OPTIONS[:limit]
       end
 
       pagy = pagy_from(collection, options)

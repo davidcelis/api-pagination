@@ -16,7 +16,7 @@ gem 'rails-api'
 gem 'grape', '>= 0.10.0'
 
 # Then choose your preferred paginator from the following:
-gem 'pagy', '>= 43.0.0' # Due to breaking changes, newer versions of api-pagination require pagy 43.0.0 or later
+gem 'pagy'
 gem 'kaminari'
 gem 'will_paginate'
 
@@ -71,7 +71,7 @@ end
 Pagy does not have a built-in way to specify a maximum number of items per page, but `api-pagination` will check if you've set a `:max_per_page` variable. To configure this, you can use the following code somewhere in an initializer:
 
 ```ruby
-Pagy.options[:max_per_page] = 100
+Pagy::OPTIONS[:max_per_page] = 100
 ```
 
 If left unconfigured, clients can request as many items per page as they wish, so it's highly recommended that you configure this.

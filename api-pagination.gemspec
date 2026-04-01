@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = "> 2.7"
 
   s.add_development_dependency "kaminari", "~> 1.2", ">= 1.2.1"
-  s.add_development_dependency "pagy", "~> 43.0"
+  s.add_development_dependency "pagy", "~> 43.3"
   s.add_development_dependency "will_paginate", "~> 3.3", ">= 3.3.1"
 
   s.add_development_dependency "rspec", "~> 3.10"
